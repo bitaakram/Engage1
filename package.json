@@ -1,0 +1,19 @@
+{
+  "name": "engage-intelliblox",
+  "version": "1.0.0",
+  "description": "initial engage app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://pmsmith4@gitlab.com/IntelliMediaProjects/engage-intelliblox.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/IntelliMediaProjects/engage-intelliblox/issues"
+  },
+  "homepage": "https://gitlab.com/IntelliMediaProjects/engage-intelliblox#README"
+}
