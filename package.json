@@ -2,9 +2,16 @@
   "name": "testapp",
   "description": "An Aurelia client application.",
   "version": "0.1.0",
+  "engines": {
+    "npm": "3.10.10"
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "repository": {
-    "type": "???",
-    "url": "???"
+    "type": "git",
+    "url": "git+https://pmsmith4@gitlab.com/IntelliMediaProjects/engage-intelliblox.git"
   },
   "license": "MIT",
   "dependencies": {
