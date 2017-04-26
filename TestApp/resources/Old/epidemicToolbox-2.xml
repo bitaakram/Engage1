@@ -1,0 +1,84 @@
+<xml xmlns="http://www.w3.org/1999/xhtml" id="toolbox" style="display: none;">
+  <category name="Activity 1">
+    <block type="entity">
+      <statement name="Entity">
+        <block type="in1">
+          <value name="NAME">
+            <block type="characs"></block>
+          </value>
+          <next>
+            <block type="in1">
+              <value name="NAME">
+                <block type="behaves"></block>
+              </value>
+            </block>
+          </next>
+        </block>
+      </statement>
+    </block>
+    <block type="color">
+      <field name="Color">#3366ff</field>
+    </block>
+    <block type="type">
+      <field name="Type">Person</field>
+    </block>
+    <block type="age">
+      <field name="age">0</field>
+    </block>
+    <block type="move"></block>
+    <block type="backward">
+      <field name="NAME">0</field>
+    </block>
+    <block type="forward">
+      <field name="NAME">0</field>
+    </block>
+    <block type="turn_right">
+      <field name="NAME">0</field>
+    </block>
+    <block type="turn_left">
+      <field name="NAME">0</field>
+    </block>
+  </category>
+  <category name="Activity 2">
+    <block type="collision">
+      <field name="NAME">Virus</field>
+    </block>
+    <block type="set">
+      <field name="NAME">Color</field>
+    </block>
+    <block type="simulation">
+      <statement name="NAME">
+        <block type="insim">
+          <next>
+            <block type="insim">
+              <next>
+                <block type="insim"></block>
+              </next>
+            </block>
+          </next>
+        </block>
+      </statement>
+    </block>
+    <block type="create">
+      <field name="NAME">0</field>
+      <field name="Types">OPTIONNAME</field>
+    </block>
+  </category>
+  <category name="Activity 3">
+    <block type="triat_of">
+      <field name="name">Color</field>
+      <field name="NAME">Collidee</field>
+    </block>
+  </category>
+  <category name="Activity 4">
+    <block type="clock"></block>
+    <block type="getclcok"></block>
+    <block type="variables_get">
+      <field name="VAR">Initial_time</field>
+    </block>
+    <block type="variables_set">
+      <field name="VAR">Initial_time</field>
+    </block>
+  </category>
+  <category name="Variables" colour="#A65C81" custom="VARIABLE"></category>
+</xml>

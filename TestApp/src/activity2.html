@@ -1,0 +1,14 @@
+<template>
+  <div id="ControlsPanel">
+  <button click.trigger="runSimulation()">Run</button>
+  <button click.trigger="ResetPhaser()">Reset</button>
+  <br>
+  <button click.trigger="SaveWorkspace()">Save Workspace</button>
+  <button click.trigger="LoadWorkspace()">Load Workspace</button>
+  </div>
+  <div id="phaserDiv" style="height: 600px; width: 600px; display: inline-block;" ></div>
+  <div id="blocklyDiv" style="height: 600px; width: 600px; display: inline-block;"></div>
+  <div id="curve_chart" style="width: 900px; height: 500px"></div>
+  <br>
+
+</template>
