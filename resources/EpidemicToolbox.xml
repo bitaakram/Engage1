@@ -98,7 +98,6 @@
       </statement>
     </block>
   </category>
-  <category name="Variables" colour="#A65C81" custom="VARIABLE"></category>
   <category name="General">
     <block type="controls_if"></block>
     <block type="logic_compare">

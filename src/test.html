@@ -1,3 +1,64 @@
 <template>
-  <h1>Test Page</h1>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engage IntelliBlocks Web Application Template </title>
+    <link rel="stylesheet" href="css/foundation.css">
+    <link rel="stylesheet" href="css/app.css">
+  </head>
+
+
+<body>
+
+<!--  Main Menu -->
+    
+  <div data-sticky-container>
+    <div class="main-nav" data-sticky data-options="marginTop:0;" style="width:100%" data-top-anchor="1" data-btm-anchor="content:bottom">    
+      <div class="main-nav-left">
+        <a class="logo" href="https://www.engage.com/">ENGAGE</a> <!--  Change to homepage for Engage IntelliBlocks -->
+      </div>
+    </div>
+  </div>
+
+
+<!--  Main app container with task, blockly, and simulation window -->
+
+  <div class="app-container">
+      <div class ="activity-container">
+
+     <div class="activity-menu">
+          <div class="title"> Epidemic! </div>
+          <div class="activity-navigation">
+            <ul>
+                <li><a class="dropdown" href="#/activity1">Part 1</a>
+                    <ul>
+                        <li><a href="#/activity2">Part 2</a></li>
+                        <li><a href="#">Part 3</a></li>
+                        <li><a href="#">Part 4</a></li>
+                    </ul>
+                    </li>
+            </ul>
+        </div>
+        <div class="hint-button"> HINT </div>
+        <div class="instructions-button"><a href="#" onclick="show('popup1')"> Instructions</a></div>
+         
+      </div>
+
+
+        <div id="blocklyDiv" class="blocks"> </div>
+        <div id="phaserDiv" class="visualization"> </div>
+      </div>
+  
+      
+
+<div class="popup" id="popup1">
+  <p>This is a popup!</p>
+  <p>Overlay uses <b>box-shadow</b>.</p>
+  <p>(Doesn't block elements on background)</p>
+  <a href="#" onclick="hide('popup1')">Ok!</a>
+</div>
+
+ 
+  </body>
 </template>
