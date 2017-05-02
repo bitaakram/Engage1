@@ -1,50 +1,94 @@
 var myApp
 var responseText
+var targetHeading
 var myApp
+var ball1;
+var ball2;
+var cursor;
 
-var PersonProperties = {};
-var VirusProperties = {};
+var EntityProperties = {};
 
-function preload() {    
-    myApp.game.load.image('Man1', 'assets/Man1.png');
-    myApp.game.load.image('Man2', 'assets/Man2.png');
-    myApp.game.load.image('Woman1', 'assets/Woman1.png');
-    myApp.game.load.image('Woman2', 'assets/Woman2.png');
-
-    myApp.game.load.image('Man1Sick', 'assets/Man1_sick.png');
-    myApp.game.load.image('Man2Sick', 'assets/Man2_sick.png');
-    myApp.game.load.image('Woman1Sick', 'assets/Woman1_sick.png');
-    myApp.game.load.image('Woman2Sick', 'assets/Woman2_sick.png');
-
-    myApp.game.load.image('Virus1', 'assets/Virus1.png');
-    myApp.game.load.image('Virus2', 'assets/Virus2.png');
-    myApp.game.load.image('Virus3', 'assets/Virus3.png');
+function preload() {
+    myApp.game.load.image('wizball', 'assets/wizball.png');
+    myApp.game.load.image('redball', 'assets/redwizball.png');
+    myApp.game.load.image('blueball', 'assets/bluewizball.png');
 }
 
 
 function create() {
-    //  We're going to be using physics, so enable the Arcade Physics system
-    myApp.game.stage.backgroundColor = "#dbd6d7";
+    //We're going to be using physics, so enable the Arcade Physics system
+    //myApp.game.stage.backgroundColor = "#dbd6d7";
     myApp.game.physics.startSystem(Phaser.Physics.ARCADE);
-    
-    myApp.Persons = myApp.game.add.group();
-    myApp.Persons.enableBody = true;
-    myApp.Persons.physicsBodyType = Phaser.Physics.ARCADE;
+   
+    myApp.healthyPersons = myApp.game.add.group();
+    myApp.healthyPersons.enableBody = true;
+    myApp.healthyPersons.physicsBodyType = Phaser.Physics.ARCADE;
 
-    myApp.Viruses = myApp.game.add.group();
-    myApp.Viruses.enableBody = true;
-    myApp.Viruses.physicsBodyType = Phaser.Physics.ARCADE;
+    var scaleFactor = .1
+
+    for (var i = 0; i < 100; i++)
+    {
+        var c = myApp.healthyPersons.create(myApp.game.world.randomX, Math.random() * 600, 'wizball', myApp.game.rnd.integerInRange(0, 36));
+        c.scale = new Phaser.Point(scaleFactor,scaleFactor);
+        c.anchor.set(.5);
+        c.name = 'healthyPerson' + i;
+        c.body.collideWorldBounds = true;
+        c.body.bounce.set(1);
+    }
+
+    myApp.infectedPersons = myApp.game.add.group();
+    myApp.infectedPersons.enableBody = true;
+    myApp.infectedPersons.physicsBodyType = Phaser.Physics.ARCADE;
+
+    for (var i = 0; i < 5; i++)
+    {
+        var c = myApp.infectedPersons.create(myApp.game.world.randomX, Math.random() * 600, 'redball', myApp.game.rnd.integerInRange(0, 36));
+        c.scale = new Phaser.Point(scaleFactor,scaleFactor);
+        c.anchor.set(.5);
+        c.name = 'infectedPerson' + i;
+        c.body.collideWorldBounds = true;
+        c.body.bounce.set(1);
+    }
+
+    
+    myApp.healers = myApp.game.add.group();
+    myApp.healers.enableBody = true;
+    myApp.healers.physicsBodyType = Phaser.Physics.ARCADE;
+
+    for (var i = 0; i < 25; i++)
+    {
+        var c = myApp.healers.create(myApp.game.world.randomX, Math.random() * 600, 'blueball', myApp.game.rnd.integerInRange(0, 36));
+        c.scale = new Phaser.Point(scaleFactor,scaleFactor);
+        c.anchor.set(.5);
+        c.name = 'healer' + i;
+        c.body.collideWorldBounds = true;
+        c.body.bounce.set(1);
+    }
 }
 
-function update(){
-    
-}
 
-function SetCharacteristics(type,age,status)
+function update()
 {
-    PersonProperties.type = type;
-    PersonProperties.age = age;
-    PersonProperties.status = status;
+    myApp.game.physics.arcade.collide(myApp.healthyPersons, myApp.healthyPersons, null, null, this);
+    myApp.game.physics.arcade.collide(myApp.infectedPersons, myApp.infectedPersons, null, null, this);
+    myApp.game.physics.arcade.collide(myApp.healers, myApp.healers, null, null, this);
+    myApp.game.physics.arcade.collide(myApp.healers, myApp.healthyPersons, null, null, this);
+    
+    
+    myApp.game.physics.arcade.collide(myApp.healthyPersons, myApp.infectedPersons, myApp.HealthyInfectedCollision.bind(myApp), null, this);
+    myApp.game.physics.arcade.collide(myApp.healers, myApp.infectedPersons, myApp.HealerInfectedCollision.bind(myApp), null, this);
+
+
+    updateHeading(myApp.healthyPersons)
+    updateHeading(myApp.infectedPersons)
+    updateHeading(myApp.healers)
+}
+
+
+function SetCharacteristics(type,age)
+{
+    EntityProperties.type = type;
+    EntityProperties.age = age;
 }
 
 function GetCharacteristics()
@@ -66,119 +110,29 @@ function GetCharacteristics()
     }
 }
 
-function CreateEntity(entityLabel)
-{
-    if(entityLabel == "Person")
-    {
-        CreatePerson()
-    }
-    else if(entityLabel == "Virus")
-    {
-        CreateVirus()
-    }
-}
-
-function CreateVirus()
-{
-    //GetCharacteristics();
-    var spriteName = "Virus1"//PersonProperties.type;
-
-    var c = myApp.Persons.create(400, 300, spriteName);
-    c.scale = new Phaser.Point(1,1);
-    c.anchor.set(.5);
-
-    myApp.currentGameObject = c;
-
-    CheckBehaviors();
-}
-
-function CreatePerson()
+function CreateLargeEntity(entityLabel)
 {
     GetCharacteristics();
 
-    var spriteName = PersonProperties.type;
-
-    if(PersonProperties.status == "Sick")
-    {
-        spriteName += "Sick";
-    }
-
-    var c = myApp.Persons.create(100, 300, spriteName);
+    var sprite = EntityProperties.type;
+    
+    var c = myApp.game.add.sprite(200, 200, sprite);
     c.scale = new Phaser.Point(1,1);
     c.anchor.set(.5);
-    c.type = PersonProperties.type;
-    c.age = PersonProperties.age;
-    c.status = PersonProperties.status;
+    c.type = EntityProperties.type;
+    c.age = EntityProperties.age;
 
-    /*
     var style = { font: "16px Courier", fill: "#000000" };
-    var text1 = myApp.game.add.text(16, -30, "Age: "+c.age.toString(), style);
-    var text2 = myApp.game.add.text(16, 0, "Type: "+c.type, style);
-    var text3 = myApp.game.add.text(16, 30, "Status: "+c.status, style);
+    var text1 = myApp.game.add.text(0, 0, "Age: "+c.age.toString(), style);
+    var text2 = myApp.game.add.text(0, 0, "Type: "+c.type, style);
 
-    c.addChild(text1);
-    c.addChild(text2);
-    c.addChild(text3);
-
-    */
-    myApp.currentGameObject = c;
-
-    CheckBehaviors();
+    text1.alignTo(c, Phaser.RIGHT_TOP, 16);
+    text2.alignTo(c, Phaser.RIGHT_CENTER, 16);
 }
-
-function CheckBehaviors()
+function MoveBallRight()
 {
-    //Get Move Block
-    var allXml = Blockly.Xml.workspaceToDom(myApp.workspace).childNodes;
-    for (var i = 0; xml = allXml[i]; i++) {
-        var xml = allXml[i];
-        if(xml.getAttribute('type')=='entity')
-        {
-          //Get Behavior Blocks
-          var childBlocks = xml.getElementsByTagName("block");
-          var moveBlock = null;
-          for(var j=0; j<childBlocks.length; j++)
-          {
-            if(childBlocks[j].getAttribute('type') == "move")
-            {
-                moveBlock = childBlocks[j];
-            }
-          }
-          
-          if(moveBlock != null)
-          {
-            var headless = new Blockly.Workspace();
-            Blockly.Xml.domToBlock(moveBlock, headless);
-            var code = Blockly.JavaScript.workspaceToCode(headless);
-            var interpreter = new Interpreter(code,myApp.initApi);
-            interpreter.run()
-            headless.dispose();
-          }
-        }
-    }
-    //Execute Move Block
+  ball1.body.velocity.x=100;
 }
-
-function MoveEntity(direction)
-{
-
-    myApp.currentGameObject.body.collideWorldBounds = true;
-    myApp.currentGameObject.body.bounce.set(1);
-    if(direction == "Left")
-    {
-        myApp.currentGameObject.body.velocity.x = -100;
-    }
-    else if(direction == "Right")
-    {
-        myApp.currentGameObject.body.velocity.x = 100;
-    }
-    else if(direction == "Random")
-    {
-        myApp.currentGameObject.body.velocity.x = Math.random() * 100 - 50;
-        myApp.currentGameObject.body.velocity.y = Math.random() * 100 - 50;
-    }
-}
-
 
 function ResetPhaser()
 {
@@ -222,7 +176,7 @@ function updateHeading(gameObj)
       console.log(err.message)
     }
 }
-export class Activity1 {
+export class Activity5 {
   workspace = {};
   interpreter = {};
   toolbox;
@@ -233,10 +187,7 @@ export class Activity1 {
   ChartData;
   TimeStamp = 0;
   SampleRate;
-  currentGameObject;
-  Persons;
-  Viruses;
-  
+  TimerId;
 
   constructor() {
     myApp = this;
@@ -246,17 +197,76 @@ export class Activity1 {
   attached(){
     this.toolbox = this.LoadToolbox();
     this.game = new Phaser.Game(600, 600, Phaser.AUTO, 'phaserDiv', { preload: preload, create: create, update: update });
-  }
-  
-  
-  detached()
-  {
-      myApp.game.destroy()
-      //Add Saving Code
+
+
+    this.TimeStamp = 0;
+    this.SampleRate = 1 ;
+
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(this.initChartData);
   }
 
- 
+HttpClient()
+    {
+        this.get = function(aUrl, aCallback) {
+            var anHttpRequest = new XMLHttpRequest();
+            anHttpRequest.onreadystatechange = function() { 
+            if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                    aCallback(anHttpRequest.responseText);
+            }
+
+            anHttpRequest.open( "GET", aUrl, true );            
+            anHttpRequest.send( null );
+        }
+    }
     
+  /////////////////Chart Helper functions
+  updateChartData()
+  {
+      console.log("Updating Chart: "+myApp.TimeStamp.toString());
+      myApp.TimeStamp += myApp.SampleRate;
+      var healthyCount = myApp.healthyPersons.length
+      var sickCount = myApp.infectedPersons.length
+      myApp.ChartData.addRow([myApp.TimeStamp,healthyCount,sickCount])
+      myApp.drawChart();
+  }
+
+  initChartData()
+  {
+      myApp.ChartData = new google.visualization.DataTable();
+      myApp.ChartData.addColumn('number','Time')
+      myApp.ChartData.addColumn('number','Healthy')
+      myApp.ChartData.addColumn('number','Sick')
+      myApp.TimerId = window.setInterval(myApp.updateChartData,myApp.SampleRate*1000);
+      myApp.drawChart();
+  }
+
+  detached()
+  {
+      myApp.ChartData = new google.visualization.DataTable();
+      myApp.ChartData.addColumn('number','Time')
+      myApp.ChartData.addColumn('number','Healthy')
+      myApp.ChartData.addColumn('number','Sick')
+      window.clearInterval(myApp.TimerId);
+
+      myApp.game.destroy()
+  }
+
+  drawChart() {
+        var data = myApp.ChartData;
+
+        var options = {
+          title: 'Sick vs Healthy',
+          curveType: 'function',
+          legend: { position: 'bottom' }
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+        chart.draw(data, options);
+  }
+
+
 /////////////////Save/Load Functions
   SaveWorkspace()
   {
@@ -275,13 +285,6 @@ export class Activity1 {
     document.body.removeChild(pom);
   }
 
-  LoadWorkspace()
-  {
-      var url = "resources/workspace.xml";
-      var client = new this.HttpClient();
-      client.get(url, this.LoadWorkspaceCallback);
-  }
-
   LoadWorkspaceCallback(ResponseText)
   {
       var xml_text  = ResponseText;
@@ -289,11 +292,9 @@ export class Activity1 {
       myApp.workspace.clear();
       Blockly.Xml.domToWorkspace(xml, myApp.workspace);
   }
-  
-
-  LoadInitialWorkspace()
+  LoadWorkspace()
   {
-      var url = "resources/InitialWorkspaces/Activity2.xml";
+      var url = "resources/workspace.xml";
       var client = new this.HttpClient();
       client.get(url, this.LoadWorkspaceCallback);
   }
@@ -306,7 +307,6 @@ export class Activity1 {
       myApp.workspace = Blockly.inject('blocklyDiv', 
                                   {media: '../Blockly/media/',
                                    toolbox: myApp.toolbox});
-      myApp.LoadInitialWorkspace();
   }
   LoadToolbox()
   {
@@ -314,26 +314,33 @@ export class Activity1 {
       var client = new this.HttpClient();
       client.get(url, this.LoadToolBoxCallback);
   }
-   HttpClient()
-  {
-        this.get = function(aUrl, aCallback) {
-            var anHttpRequest = new XMLHttpRequest();
-            anHttpRequest.onreadystatechange = function() { 
-            if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
-                    aCallback(anHttpRequest.responseText);
-            }
 
-            anHttpRequest.open( "GET", aUrl, true );            
-            anHttpRequest.send( null );
-        }
-    }
+
 
 
 /////////////////Phaser Helper functions
   ResetPhaser()
   {
+    myApp.ChartData = new google.visualization.DataTable();
+    myApp.ChartData.addColumn('number','Time')
+    myApp.ChartData.addColumn('number','Healthy')
+    myApp.ChartData.addColumn('number','Sick')
+    myApp.TimeStamp = 0;
     myApp.game.world.removeAll(true,false,false)
     create();
+  }
+
+  setColor(targetColor)
+  {
+    if(targetColor == "RED")
+    {
+        ball2.loadTexture('redball');
+    }
+    else if(targetColor == "BLUE")
+    {
+        ball2.loadTexture('blueball');
+    }
+    myApp.game.physics.arcade.collide(ball1, ball2);
   }
 
   handleCollision()
@@ -395,14 +402,6 @@ export class Activity1 {
     console.log(code);
     var interpreter = new Interpreter(code,this.initApi);
     interpreter.run()
-    /*
-    Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
-    try {
-      eval(code);
-    } catch (e) {
-      alert(MSG['badCode'].replace('%1', e));
-    }
-    */
   }
 
   
@@ -422,34 +421,24 @@ export class Activity1 {
       interpreter.setProperty(scope, 'SetColor',
           interpreter.createNativeFunction(wrapper));
       
-     wrapper = function() {
-        var test = interpreter.createPrimitive(CreateEntity("Person"));
+      wrapper = function() {
+        var test = interpreter.createPrimitive(MoveBallRight());
         return test;
       };
-      interpreter.setProperty(scope, 'CreatePerson',
-          interpreter.createNativeFunction(wrapper));
+      interpreter.setProperty(scope, 'MoveBallRight',
+          interpreter.createNativeFunction(wrapper));    
 
-     wrapper = function(text) {
+      wrapper = function(text) {
         text = text ? text.toString() : '';
-        var test = interpreter.createPrimitive(CreateEntity(text));
+        var test = interpreter.createPrimitive(CreateLargeEntity(text));
         return test;
       };
       interpreter.setProperty(scope, 'CreateLargeEntity',
           interpreter.createNativeFunction(wrapper));
 
-    wrapper = function(text) {
+      wrapper = function(text,number) {
         text = text ? text.toString() : '';
-        var test = interpreter.createPrimitive(MoveEntity(text));
-        return test;
-      };
-      interpreter.setProperty(scope, 'MoveEntity',
-          interpreter.createNativeFunction(wrapper));
-
-      wrapper = function(text,age,status) {
-        text = text ? text.toString() : '';
-        status = status ? status.toString() : ""
-        age = age ? age.toString() : ""
-        var test = interpreter.createPrimitive(SetCharacteristics(text,age,status));
+        var test = interpreter.createPrimitive(SetCharacteristics(text,number));
         return test;
       };
       interpreter.setProperty(scope, 'SetCharacteristics',

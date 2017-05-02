@@ -1,18 +1,11 @@
 var myApp
 var responseText
-var targetHeading
 var myApp
-var ball1;
-var ball2;
-var cursor;
 
 var EntityProperties = {};
 
+
 function preload() {
-    myApp.game.load.image('wizball', 'assets/wizball.png');
-    myApp.game.load.image('redball', 'assets/redwizball.png');
-    myApp.game.load.image('blueball', 'assets/bluewizball.png');
-    
     myApp.game.load.image('Man1', 'assets/Man1.png');
     myApp.game.load.image('Man2', 'assets/Man2.png');
     myApp.game.load.image('Woman1', 'assets/Woman1.png');
@@ -22,7 +15,6 @@ function preload() {
     myApp.game.load.image('Man2Sick', 'assets/Man2_sick.png');
     myApp.game.load.image('Woman1Sick', 'assets/Woman1_sick.png');
     myApp.game.load.image('Woman2Sick', 'assets/Woman2_sick.png');
-
 }
 
 
@@ -30,6 +22,9 @@ function create() {
     //  We're going to be using physics, so enable the Arcade Physics system
     myApp.game.stage.backgroundColor = "#dbd6d7";
     myApp.game.physics.startSystem(Phaser.Physics.ARCADE);
+    myApp.Entities = myApp.game.add.group();
+    myApp.Entities.enableBody = true;
+    myApp.Entities.physicsBodyType = Phaser.Physics.ARCADE;
 }
 
 function update(){
@@ -62,10 +57,9 @@ function GetCharacteristics()
     }
 }
 
-function CreateLargeEntity(entityLabel)
+function CreatePerson(entityLabel)
 {
     GetCharacteristics();
-
 
     var spriteName = EntityProperties.type;
 
@@ -74,7 +68,7 @@ function CreateLargeEntity(entityLabel)
         spriteName += "Sick";
     }
 
-    var c = myApp.game.add.sprite(200, 200, spriteName);
+    var c = myApp.Entities.create(200, 200, spriteName);
     c.scale = new Phaser.Point(1,1);
     c.anchor.set(.5);
     c.type = EntityProperties.type;
@@ -82,18 +76,76 @@ function CreateLargeEntity(entityLabel)
     c.status = EntityProperties.status;
 
     var style = { font: "16px Courier", fill: "#000000" };
-    var text1 = myApp.game.add.text(0, 0, "Age: "+c.age.toString(), style);
-    var text2 = myApp.game.add.text(0, 0, "Type: "+c.type, style);
-    var text3 = myApp.game.add.text(0, 0, "Status: "+c.status, style);
+    var text1 = myApp.game.add.text(16, -30, "Age: "+c.age.toString(), style);
+    var text2 = myApp.game.add.text(16, 0, "Type: "+c.type, style);
+    var text3 = myApp.game.add.text(16, 30, "Status: "+c.status, style);
 
-    text1.alignTo(c, Phaser.RIGHT_TOP, 16);
-    text2.alignTo(c, Phaser.RIGHT_CENTER, 16);
-    text3.alignTo(c, Phaser.RIGHT_BOTTOM, 16);
+    //text1.alignTo(c, Phaser.RIGHT_TOP, 16);
+    //text2.alignTo(c, Phaser.RIGHT_CENTER, 16);
+    //text3.alignTo(c, Phaser.RIGHT_BOTTOM, 16);
+
+    c.addChild(text1);
+    c.addChild(text2);
+    c.addChild(text3);
+
+    myApp.currentGameObject = c;
+
+    CheckBehaviors();
 }
-function MoveBallRight()
+
+function CheckBehaviors()
 {
-  ball1.body.velocity.x=100;
+    //Get Move Block
+    var allXml = Blockly.Xml.workspaceToDom(myApp.workspace).childNodes;
+    for (var i = 0; xml = allXml[i]; i++) {
+        var xml = allXml[i];
+        if(xml.getAttribute('type')=='entity')
+        {
+          //Get Behavior Blocks
+          var childBlocks = xml.getElementsByTagName("block");
+          var moveBlock = null;
+          for(var j=0; j<childBlocks.length; j++)
+          {
+            if(childBlocks[j].getAttribute('type') == "move")
+            {
+                moveBlock = childBlocks[j];
+            }
+          }
+          
+          if(moveBlock != null)
+          {
+            var headless = new Blockly.Workspace();
+            Blockly.Xml.domToBlock(moveBlock, headless);
+            var code = Blockly.JavaScript.workspaceToCode(headless);
+            var interpreter = new Interpreter(code,myApp.initApi);
+            interpreter.run()
+            headless.dispose();
+          }
+        }
+    }
+    //Execute Move Block
 }
+
+function MoveEntity(direction)
+{
+
+    myApp.currentGameObject.body.collideWorldBounds = true;
+    myApp.currentGameObject.body.bounce.set(1);
+    if(direction == "Left")
+    {
+        myApp.currentGameObject.body.velocity.x = -100;
+    }
+    else if(direction == "Right")
+    {
+        myApp.currentGameObject.body.velocity.x = 100;
+    }
+    else if(direction == "Random")
+    {
+        myApp.currentGameObject.body.velocity.x = Math.random() * 100 - 50;
+        myApp.currentGameObject.body.velocity.y = Math.random() * 100 - 50;
+    }
+}
+
 
 function ResetPhaser()
 {
@@ -137,7 +189,7 @@ function updateHeading(gameObj)
       console.log(err.message)
     }
 }
-export class Activity1 {
+export class Activity2 {
   workspace = {};
   interpreter = {};
   toolbox;
@@ -148,6 +200,8 @@ export class Activity1 {
   ChartData;
   TimeStamp = 0;
   SampleRate;
+  currentGameObject;
+  Entities;
   
 
   constructor() {
@@ -157,21 +211,6 @@ export class Activity1 {
   //before view-model renders
   attached(){
     this.toolbox = this.LoadToolbox();
-    
-   /*                               
-    this.WhenRunBlock = this.workspace.newBlock('functionheader');
-    this.WhenRunBlock.initSvg();
-    this.WhenRunBlock.render();
-    this.WhenRunBlock.setMovable(false);
-    this.WhenRunBlock.setDeletable(false);
-    
-    this.CollisionBlock = this.workspace.newBlock('collision');
-    this.CollisionBlock.initSvg();
-    this.CollisionBlock.render();
-    this.CollisionBlock.moveBy(200,0)
-    this.CollisionBlock.setMovable(false);
-    this.CollisionBlock.setDeletable(false);
-*/
     this.game = new Phaser.Game(600, 600, Phaser.AUTO, 'phaserDiv', { preload: preload, create: create, update: update });
   }
   
@@ -179,6 +218,7 @@ export class Activity1 {
   detached()
   {
       myApp.game.destroy()
+      //Add Saving Code
   }
 
  
@@ -201,6 +241,13 @@ export class Activity1 {
     document.body.removeChild(pom);
   }
 
+  LoadWorkspace()
+  {
+      var url = "resources/workspace.xml";
+      var client = new this.HttpClient();
+      client.get(url, this.LoadWorkspaceCallback);
+  }
+
   LoadWorkspaceCallback(ResponseText)
   {
       var xml_text  = ResponseText;
@@ -208,9 +255,11 @@ export class Activity1 {
       myApp.workspace.clear();
       Blockly.Xml.domToWorkspace(xml, myApp.workspace);
   }
-  LoadWorkspace()
+  
+
+  LoadInitialWorkspace()
   {
-      var url = "resources/workspace.xml";
+      var url = "resources/InitialWorkspaces/Activity1.xml";
       var client = new this.HttpClient();
       client.get(url, this.LoadWorkspaceCallback);
   }
@@ -223,6 +272,7 @@ export class Activity1 {
       myApp.workspace = Blockly.inject('blocklyDiv', 
                                   {media: '../Blockly/media/',
                                    toolbox: myApp.toolbox});
+      myApp.LoadInitialWorkspace();
   }
   LoadToolbox()
   {
@@ -358,18 +408,34 @@ export class Activity1 {
       interpreter.setProperty(scope, 'MoveBallRight',
           interpreter.createNativeFunction(wrapper));    
 
-      wrapper = function(text) {
+     wrapper = function() {
+        var test = interpreter.createPrimitive(CreatePerson("Person"));
+        return test;
+      };
+      interpreter.setProperty(scope, 'CreatePerson',
+          interpreter.createNativeFunction(wrapper));
+
+     wrapper = function(text) {
         text = text ? text.toString() : '';
-        var test = interpreter.createPrimitive(CreateLargeEntity(text));
+        var test = interpreter.createPrimitive(CreatePerson(text));
         return test;
       };
       interpreter.setProperty(scope, 'CreateLargeEntity',
           interpreter.createNativeFunction(wrapper));
 
-      wrapper = function(text,number,status) {
+    wrapper = function(text) {
+        text = text ? text.toString() : '';
+        var test = interpreter.createPrimitive(MoveEntity(text));
+        return test;
+      };
+      interpreter.setProperty(scope, 'MoveEntity',
+          interpreter.createNativeFunction(wrapper));
+
+      wrapper = function(text,age,status) {
         text = text ? text.toString() : '';
         status = status ? status.toString() : ""
-        var test = interpreter.createPrimitive(SetCharacteristics(text,number,status));
+        age = age ? age.toString() : ""
+        var test = interpreter.createPrimitive(SetCharacteristics(text,age,status));
         return test;
       };
       interpreter.setProperty(scope, 'SetCharacteristics',

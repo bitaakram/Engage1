@@ -1,6 +1,7 @@
 <xml xmlns="http://www.w3.org/1999/xhtml" id="toolbox" style="display: none;">
   <category name="Activity 1">
     <block type="spawnblock"></block>
+    <block type="createperson"></block>
     <block type="status"></block>
     <block type="entity">
       <statement name="Entity">
@@ -36,6 +37,7 @@
       <field name="age">0</field>
     </block>
     <block type="move"></block>
+    <block type="direction"></block>
     <block type="turn_left"></block>
     <block type="backward"></block>
     <block type="forward"></block>

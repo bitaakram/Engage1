@@ -1,0 +1,145 @@
+<xml xmlns="http://www.w3.org/1999/xhtml">
+  <block type="entity" id="bd$4.gX1@d:xTLOi3Gb+" x="-323" y="-344">
+    <statement name="Entity">
+      <block type="in1" id="4YHOp-+V6]M0)N=z-jp5">
+        <value name="NAME">
+          <block type="characteristics3" id="KkdLTXau[U]C%{gi)N@e"></block>
+        </value>
+        <next>
+          <block type="in1" id="EGocIg{@$2GG_2EA#[5E">
+            <value name="NAME">
+              <block type="behaviors2" id="-}/_Tu+zv[=qvVtF$`Yw">
+                <statement name="NAME">
+                  <block type="in_behaviour" id="#rXh;6}!hprrIq#?}ho`">
+                    <value name="NAME">
+                      <block type="move" id=";r~^rP@#oe{t-/UKLLi@">
+                        <statement name="Move">
+                          <block type="direction" id="E7$UcT%Os9D$[_ad4cT(">
+                            <field name="Direction">Left</field>
+                          </block>
+                        </statement>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="in_behaviour" id="hU26j2s$BWkje@B!9WCl">
+                        <value name="NAME">
+                          <block type="collision" id="MM_C~[%2y$49yS9etGgH">
+                            <field name="NAME">Person</field>
+                            <statement name="NAME">
+                              <block type="controls_if" id="M~jpgcd{KrRhN1={X:Vq">
+                                <value name="IF0">
+                                  <block type="logic_compare" id=";AyLoTKM)0BP}X|!QhN!">
+                                    <field name="OP">EQ</field>
+                                    <value name="A">
+                                      <block type="triat_of" id="2S(ADiM@3A=EoN?dyB#i">
+                                        <field name="name">Color</field>
+                                        <field name="NAME">Collidee</field>
+                                      </block>
+                                    </value>
+                                    <value name="B">
+                                      <block type="status" id="q8LHw$OCsu8zYG:~:~#|">
+                                        <field name="Status">Sick</field>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </value>
+                                <statement name="DO0">
+                                  <block type="set" id="{K.AJVe?8/u*-1muLPkj">
+                                    <field name="NAME">Color</field>
+                                    <value name="NAME">
+                                      <block type="status" id="ni!zB{aZV(b}q+[KC8[L">
+                                        <field name="Status">Sick</field>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </statement>
+                              </block>
+                            </statement>
+                          </block>
+                        </value>
+                        <next>
+                          <block type="in_behaviour" id="qh+/ei%?yoYhYh*-tacE">
+                            <value name="NAME">
+                              <block type="collision" id=";:ph.TD)bn$WW+G[2kqB">
+                                <field name="NAME">Virus</field>
+                                <statement name="NAME">
+                                  <block type="set" id="8~IvAMc|9^/,S*$?O|H[">
+                                    <field name="NAME">Color</field>
+                                    <value name="NAME">
+                                      <block type="status" id="vu+9,KmC3JqVH@GG?p_/">
+                                        <field name="Status">Sick</field>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </statement>
+                              </block>
+                            </value>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </statement>
+              </block>
+            </value>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="simulation" id="nPfW*^7Pbz^J6o#eh2g7" x="-86" y="-344">
+    <statement name="NAME">
+      <block type="insim" id="0ig;C)6/=Jo8G1Ac(p@~">
+        <value name="NAME">
+          <block type="create" id="]AxF%]J_]/i)9*xjmu3(">
+            <field name="NAME">0</field>
+            <field name="Types">Peaple</field>
+          </block>
+        </value>
+        <next>
+          <block type="insim" id="fxC|~({NE?FY314G!E5=">
+            <value name="NAME">
+              <block type="create" id="Vzs@*ynX}mGL7CUL8i;$">
+                <field name="NAME">0</field>
+                <field name="Types">People</field>
+              </block>
+            </value>
+            <next>
+              <block type="insim" id="@`CWblJK}Z~5DN]xI=Y9"></block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="entity" id="zlz#c]k{anypss:3SMu6" x="-328" y="116">
+    <statement name="Entity">
+      <block type="in1" id="AAL4?2u^Q.l2)~yr)S%t">
+        <value name="NAME">
+          <block type="characteristics3" id="eoM1l/6Sj2.,odRIV=F-"></block>
+        </value>
+        <next>
+          <block type="in1" id="]|4wq;t]H-*srn-X]+!$">
+            <value name="NAME">
+              <block type="behaviors2" id="[:)]WZ^%4g]Byv]ZztQH">
+                <statement name="NAME">
+                  <block type="in_behaviour" id="h=xP+u;yPA8-|?vpHTkW">
+                    <value name="NAME">
+                      <block type="move" id="f`xQl3AMo.vuZ{#(Gpf0">
+                        <statement name="Move">
+                          <block type="direction" id="C_=3{hr9*[.Sx~v7aO^9">
+                            <field name="Direction">Left</field>
+                          </block>
+                        </statement>
+                      </block>
+                    </value>
+                  </block>
+                </statement>
+              </block>
+            </value>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+</xml>

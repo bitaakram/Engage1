@@ -8,10 +8,6 @@ Blockly.JavaScript['color'] = function(block) {
   return code;
 };
 
-Blockly.JavaScript['move'] = function(block) {
-  var code = '\n';
-  return code;
-};
 Blockly.JavaScript['forward'] = function(block) {
   var code = '\n';
   return code;
@@ -121,7 +117,7 @@ Blockly.JavaScript['characteristics3'] = function(block) {
   var value_type = Blockly.JavaScript.valueToCode(block, 'Type', Blockly.JavaScript.ORDER_ATOMIC);
   var value_age = Blockly.JavaScript.valueToCode(block, 'Age', Blockly.JavaScript.ORDER_ATOMIC);
   var value_status = Blockly.JavaScript.valueToCode(block, 'Status', Blockly.JavaScript.ORDER_ATOMIC);
-  var code = 'SetCharacteristics(\"' + value_type + '\",' + value_age + ',\"' + value_status + '\")';
+  var code = 'SetCharacteristics(\"' + value_type + '\",\"' + value_age + '\",\"' + value_status + '\")';
   
   return [code];
 };
@@ -129,13 +125,6 @@ Blockly.JavaScript['characteristics3'] = function(block) {
 Blockly.JavaScript['type'] = function(block) {
   var dropdown_name = block.getFieldValue('Type');
   var code = dropdown_name;
-  return [code];
-};
-
-
-Blockly.JavaScript['age'] = function(block) {
-  var number_name = block.getFieldValue('age');
-  var code = number_name;
   return [code];
 };
 
@@ -150,6 +139,46 @@ Blockly.JavaScript['behaviors2'] = function(block) {
   return [code];
 };
 
+Blockly.Blocks['direction'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Direction")
+        .appendField(new Blockly.FieldDropdown([["Left","Left"], ["Right","Right"], ["Random","Random"]]), "Direction");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(290);
+    this.setTooltip('');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.JavaScript['direction'] = function(block) {
+  var dropdown_direction = block.getFieldValue('Direction');
+  var code = "MoveEntity(\"" + dropdown_direction + "\")";
+  return code;
+};
+
+Blockly.Blocks['createperson'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Create 1 Person");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setColour(45);
+    this.setTooltip('');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.JavaScript['createperson'] = function(block) {
+  var code = 'CreatePerson()\n';
+  return code;
+};
+
+Blockly.JavaScript['move'] = function(block) {
+  var statements_code = Blockly.JavaScript.statementToCode(block, 'Move');  
+  return statements_code;
+};
 
 
 

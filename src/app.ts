@@ -11,7 +11,8 @@ export class App {
          { route: ['','home'], name: 'home', moduleId:'./home', nav:true, title:'Home' },
          { route: ['test'],  name: 'test',  moduleId: './test',  nav: true, title:'Test' },
          { route: ['activity1'],  name: 'activity1',  moduleId: './activity1',  nav: true, title:'Activity1' },
-         { route: ['activity2'],  name: 'activity2',  moduleId: './activity2',  nav: true, title:'Activity2' }
+         { route: ['activity2'],  name: 'activity2',  moduleId: './activity2',  nav: true, title:'Activity2' },
+         { route: ['activity5'],  name: 'activity5',  moduleId: './activity5',  nav: true, title:'Activity5' }
          
       ]);
 
