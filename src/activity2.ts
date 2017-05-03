@@ -74,7 +74,7 @@ function GetCharacteristics()
     }
 }
 
-unction SetCharacteristic(field,newValue)
+function SetCharacteristic(field,newValue)
 {
     if(field == "Status")
     {
