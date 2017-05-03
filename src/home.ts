@@ -1,1 +1,6 @@
-export class Home {}
+import {RouterConfiguration, Router} from 'aurelia-router';
+export class Home {
+router:Router;
+
+
+}

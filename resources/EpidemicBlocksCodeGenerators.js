@@ -24,10 +24,7 @@ Blockly.JavaScript['turn_right'] = function(block) {
   var code = '\n';
   return code;
 };
-Blockly.JavaScript['collision'] = function(block) {
-  var code = '\n';
-  return code;
-};
+
 Blockly.JavaScript['set'] = function(block) {
   var code = '\n';
   return code;
@@ -103,7 +100,7 @@ Blockly.Blocks['status'] = {
 Blockly.JavaScript['status'] = function(block) {
   var dropdown_status = block.getFieldValue('Status');
   // TODO: Assemble JavaScript into code variable.
-  var code = dropdown_status;
+  var code = "\"" + dropdown_status + "\"";
   return [code];
 };
 
@@ -117,14 +114,14 @@ Blockly.JavaScript['characteristics3'] = function(block) {
   var value_type = Blockly.JavaScript.valueToCode(block, 'Type', Blockly.JavaScript.ORDER_ATOMIC);
   var value_age = Blockly.JavaScript.valueToCode(block, 'Age', Blockly.JavaScript.ORDER_ATOMIC);
   var value_status = Blockly.JavaScript.valueToCode(block, 'Status', Blockly.JavaScript.ORDER_ATOMIC);
-  var code = 'SetCharacteristics(\"' + value_type + '\",\"' + value_age + '\",\"' + value_status + '\")';
+  var code = 'SetCharacteristics(' + value_type + ',\"' + value_age + '\",' + value_status + ')';
   
   return [code];
 };
 
 Blockly.JavaScript['type'] = function(block) {
   var dropdown_name = block.getFieldValue('Type');
-  var code = dropdown_name;
+  var code = "\"" + dropdown_name + "\"";
   return [code];
 };
 
@@ -180,5 +177,52 @@ Blockly.JavaScript['move'] = function(block) {
   return statements_code;
 };
 
+Blockly.Blocks['set2'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Set my")
+        .appendField(new Blockly.FieldDropdown([["Status","Status"], ["Age","Age"], ["Type","Type"]]), "Characteristic")
+        .appendField("to");
+    this.appendValueInput("NewValue")
+        .setCheck(null);
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(285);
+    this.setTooltip('');
+    this.setHelpUrl('');
+  }
+};
 
+Blockly.JavaScript['set2'] = function(block) {
+  var dropdown_characteristic = block.getFieldValue('Characteristic');
+  var newValue = Blockly.JavaScript.valueToCode(block, 'NewValue', Blockly.JavaScript.ORDER_ATOMIC);
+  var code = "SetCharacteristic(\"" + dropdown_characteristic + "\"," + newValue + ")";
+  return code;
+};
 
+Blockly.JavaScript['collision'] = function(block) {
+  var statements_code = Blockly.JavaScript.statementToCode(block, 'HandleCollision');  
+  return statements_code;
+};
+
+Blockly.Blocks['characteristic_of'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldDropdown([["Status","Status"], ["Type","Type"], ["Age","Age"]]), "Characteristic")
+        .appendField("of")
+        .appendField(new Blockly.FieldDropdown([["Collidee","Collidee"], ["Me","Me"], ["",""]]), "Target");
+    this.setInputsInline(true);
+    this.setOutput(true, null);
+    this.setColour(285);
+    this.setTooltip('');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.JavaScript['characteristic_of'] = function(block) {
+  var char_type = block.getFieldValue("Characteristic")
+  var target = block.getFieldValue("Target")
+  var code = 'GetCharacteristic(\"' + char_type + '\",\"' + target + '\")';
+  return [code];
+};

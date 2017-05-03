@@ -2,10 +2,12 @@ var myApp
 var responseText
 var myApp
 
-var EntityProperties = {};
+var PersonProperties = {};
+var VirusProperties = {};
 
+var collidee;
 
-function preload() {
+function preload() {    
     myApp.game.load.image('Man1', 'assets/Man1.png');
     myApp.game.load.image('Man2', 'assets/Man2.png');
     myApp.game.load.image('Woman1', 'assets/Woman1.png');
@@ -15,6 +17,10 @@ function preload() {
     myApp.game.load.image('Man2Sick', 'assets/Man2_sick.png');
     myApp.game.load.image('Woman1Sick', 'assets/Woman1_sick.png');
     myApp.game.load.image('Woman2Sick', 'assets/Woman2_sick.png');
+
+    myApp.game.load.image('Virus1', 'assets/Virus1.png');
+    myApp.game.load.image('Virus2', 'assets/Virus2.png');
+    myApp.game.load.image('Virus3', 'assets/Virus3.png');
 }
 
 
@@ -22,20 +28,51 @@ function create() {
     //  We're going to be using physics, so enable the Arcade Physics system
     myApp.game.stage.backgroundColor = "#dbd6d7";
     myApp.game.physics.startSystem(Phaser.Physics.ARCADE);
-    myApp.Entities = myApp.game.add.group();
-    myApp.Entities.enableBody = true;
-    myApp.Entities.physicsBodyType = Phaser.Physics.ARCADE;
+    
+    myApp.Persons = myApp.game.add.group();
+    myApp.Persons.enableBody = true;
+    myApp.Persons.physicsBodyType = Phaser.Physics.ARCADE;
+
+    myApp.Viruses = myApp.game.add.group();
+    myApp.Viruses.enableBody = true;
+    myApp.Viruses.physicsBodyType = Phaser.Physics.ARCADE;
 }
 
 function update(){
-    
+     myApp.game.physics.arcade.collide(myApp.Persons, myApp.Viruses, myApp.PersonVirusCollision.bind(myApp), null, this); 
+     myApp.game.physics.arcade.collide(myApp.Persons, myApp.Persons, myApp.PersonPersonCollision.bind(myApp), null, this);    
 }
 
 function SetCharacteristics(type,age,status)
 {
-    EntityProperties.type = type;
-    EntityProperties.age = age;
-    EntityProperties.status = status;
+    PersonProperties.type = type;
+    PersonProperties.age = age;
+    PersonProperties.status = status;
+}
+
+function GetCharacteristic(chartype, target)
+{
+    var person = myApp.currentGameObject
+    if(target == "Collidee")
+    {
+        person = collidee
+    }
+    
+    if(chartype == "Age")
+    {
+        return person.age;
+    }
+    else if(chartype == "Status")
+    {
+        return person.status;
+    }
+    else if(chartype == "Type")
+    {
+        return person.type;
+    }
+
+    return "";
+
 }
 
 function GetCharacteristics()
@@ -57,39 +94,87 @@ function GetCharacteristics()
     }
 }
 
-function CreatePerson(entityLabel)
+function SetCharacteristic(field,newValue)
+{
+    if(field == "Status")
+    {
+        myApp.currentGameObject.status = newValue;
+        var spriteName = myApp.currentGameObject.type;
+        if(myApp.currentGameObject.status == "Sick")
+        {
+            spriteName += "Sick";
+        }
+        myApp.currentGameObject.loadTexture(spriteName);
+    }
+
+    if(field == "Type")
+    {
+        myApp.currentGameObject.type = newValue;
+        var spriteName = myApp.currentGameObject.type;
+        if(myApp.currentGameObject.status == "Sick")
+        {
+            spriteName += "Sick";
+        }
+        myApp.currentGameObject.loadTexture(spriteName);
+    }
+        
+}
+
+function CreateEntity(entityLabel)
+{
+    if(entityLabel == "Person")
+    {
+        CreatePerson()
+    }
+    else if(entityLabel == "Virus")
+    {
+        CreateVirus()
+    }
+}
+
+function CreateVirus()
+{
+    //GetCharacteristics();
+    var spriteName = "Virus1"//PersonProperties.type;
+
+    var c = myApp.Viruses.create(400, 300, spriteName);
+    c.scale = new Phaser.Point(1,1);
+    c.anchor.set(.5);
+
+    myApp.currentGameObject = c;
+    myApp.currentGameObject.body.collideWorldBounds = true;
+    myApp.currentGameObject.body.bounce.set(1);
+}
+
+function CreatePerson()
 {
     GetCharacteristics();
 
-    var spriteName = EntityProperties.type;
+    var spriteName = PersonProperties.type;
 
-    if(EntityProperties.status == "Sick")
+    if(PersonProperties.status == "Sick")
     {
         spriteName += "Sick";
     }
 
-    var c = myApp.Entities.create(200, 200, spriteName);
+    var c = {}
+    if(myApp.Persons.length == 0)
+    {
+        c = myApp.Persons.create(100, 300, spriteName);
+    }
+    else
+    {
+        c = myApp.Persons.create(myApp.game.world.randomX, myApp.game.world.randomY, spriteName);
+    }
+    
     c.scale = new Phaser.Point(1,1);
     c.anchor.set(.5);
-    c.type = EntityProperties.type;
-    c.age = EntityProperties.age;
-    c.status = EntityProperties.status;
-
-    var style = { font: "16px Courier", fill: "#000000" };
-    var text1 = myApp.game.add.text(16, -30, "Age: "+c.age.toString(), style);
-    var text2 = myApp.game.add.text(16, 0, "Type: "+c.type, style);
-    var text3 = myApp.game.add.text(16, 30, "Status: "+c.status, style);
-
-    //text1.alignTo(c, Phaser.RIGHT_TOP, 16);
-    //text2.alignTo(c, Phaser.RIGHT_CENTER, 16);
-    //text3.alignTo(c, Phaser.RIGHT_BOTTOM, 16);
-
-    c.addChild(text1);
-    c.addChild(text2);
-    c.addChild(text3);
-
+    c.type = PersonProperties.type;
+    c.age = PersonProperties.age;
+    c.status = PersonProperties.status;
     myApp.currentGameObject = c;
-
+    myApp.currentGameObject.body.collideWorldBounds = true;
+    myApp.currentGameObject.body.bounce.set(1);
     CheckBehaviors();
 }
 
@@ -126,11 +211,45 @@ function CheckBehaviors()
     //Execute Move Block
 }
 
+function GetCollisionBlockFromEntity(person,target)
+{
+    //Get Move Block
+    var allXml = Blockly.Xml.workspaceToDom(myApp.workspace).childNodes;
+    for (var i = 0; xml = allXml[i]; i++) {
+        var xml = allXml[i];
+        if(xml.getAttribute('type')=='entity')
+        {
+          //Get Behavior Blocks
+          var childBlocks = xml.getElementsByTagName("block");
+          var collisionBlock = null;
+          for(var j=0; j<childBlocks.length; j++)
+          {
+            if(childBlocks[j].getAttribute('type') == "collision")
+            {
+                if(childBlocks[j].firstChild.innerText==target)
+                {
+                    collisionBlock = childBlocks[j];
+                }
+            }
+          }
+          
+          if(collisionBlock != null)
+          {
+            var headless = new Blockly.Workspace();
+            Blockly.Xml.domToBlock(collisionBlock, headless);
+            var code = Blockly.JavaScript.workspaceToCode(headless);
+            var interpreter = new Interpreter(code,myApp.initApi);
+            interpreter.run()
+            headless.dispose();
+          }
+        }
+    }
+}
+
 function MoveEntity(direction)
 {
 
-    myApp.currentGameObject.body.collideWorldBounds = true;
-    myApp.currentGameObject.body.bounce.set(1);
+   
     if(direction == "Left")
     {
         myApp.currentGameObject.body.velocity.x = -100;
@@ -153,43 +272,8 @@ function ResetPhaser()
   create();
 }
 
-function updateHeading(gameObj)
-{
-  try
-  {
-    gameObj.forEach(element => {
-    if(Math.floor(Math.random() * 20) === 0)
-    {
-          var angle = 90 * (Math.PI / 180); // Constraint in radians
-          var DIST = 200; // Within 200 pixels of current position
-          // Grab an offset angle based on the constraint
-          var offset = (Math.floor(Math.random() * angle) -  angle/2); 
-          // Get a random point within the constraint angle at DIST length away
-          var newX = element.position.x + Math.cos(element.rotation + offset) * DIST;
-          var newY = element.position.y + Math.sin(element.rotation + offset) * DIST;
-        
-          //sanitised = areYouOutside(newX, newY, _this.game.world);
-        
-          // set the new heading for the NPC
-          element.heading = {
-            x: newX,
-            y: newY
-          }
 
-          // Invoke the moveToXY function of the arcade physics to move NPC
-          myApp.game.physics.arcade.moveToXY(element, element.heading.x, element.heading.y);
-          var dx = element.heading.x - element.position.x;
-          var dy = element.heading.y - element.position.y;
-          // Rotate the NPC toward the new heading
-          element.rotation = Math.atan2(dy, dx);
-      }});
-    }
-    catch(err)
-    {
-      console.log(err.message)
-    }
-}
-export class Activity1 {
+export class Activity3 {
   workspace = {};
   interpreter = {};
   toolbox;
@@ -201,7 +285,8 @@ export class Activity1 {
   TimeStamp = 0;
   SampleRate;
   currentGameObject;
-  Entities;
+  Persons;
+  Viruses;
   
 
   constructor() {
@@ -259,7 +344,7 @@ export class Activity1 {
 
   LoadInitialWorkspace()
   {
-      var url = "resources/InitialWorkspaces/Activity1.xml";
+      var url = "resources/InitialWorkspaces/Activity3.xml";
       var client = new this.HttpClient();
       client.get(url, this.LoadWorkspaceCallback);
   }
@@ -302,19 +387,6 @@ export class Activity1 {
     create();
   }
 
-  setColor(targetColor)
-  {
-    if(targetColor == "RED")
-    {
-        ball2.loadTexture('redball');
-    }
-    else if(targetColor == "BLUE")
-    {
-        ball2.loadTexture('blueball');
-    }
-    myApp.game.physics.arcade.collide(ball1, ball2);
-  }
-
   handleCollision()
   {
     var allXml = Blockly.Xml.workspaceToDom(this.workspace).childNodes;
@@ -332,6 +404,24 @@ export class Activity1 {
     }
   }
   
+  PersonVirusCollision(person,virus)
+  {
+      myApp.currentGameObject = person;
+      GetCollisionBlockFromEntity(person,"Virus")
+      
+  }
+
+  PersonPersonCollision(person1,person2)
+  {
+      myApp.currentGameObject = person1;
+      collidee = person2;
+      GetCollisionBlockFromEntity(person1,"Person")
+
+      myApp.currentGameObject = person2;
+      collidee = person1;
+      GetCollisionBlockFromEntity(person2,"Person")
+  }
+
   HealthyInfectedCollision(healthy, infected)
   {
       healthy.loadTexture('redball')
@@ -401,15 +491,8 @@ export class Activity1 {
       interpreter.setProperty(scope, 'SetColor',
           interpreter.createNativeFunction(wrapper));
       
-      wrapper = function() {
-        var test = interpreter.createPrimitive(MoveBallRight());
-        return test;
-      };
-      interpreter.setProperty(scope, 'MoveBallRight',
-          interpreter.createNativeFunction(wrapper));    
-
      wrapper = function() {
-        var test = interpreter.createPrimitive(CreatePerson("Person"));
+        var test = interpreter.createPrimitive(CreateEntity("Person"));
         return test;
       };
       interpreter.setProperty(scope, 'CreatePerson',
@@ -417,7 +500,7 @@ export class Activity1 {
 
      wrapper = function(text) {
         text = text ? text.toString() : '';
-        var test = interpreter.createPrimitive(CreatePerson(text));
+        var test = interpreter.createPrimitive(CreateEntity(text));
         return test;
       };
       interpreter.setProperty(scope, 'CreateLargeEntity',
@@ -440,6 +523,24 @@ export class Activity1 {
       };
       interpreter.setProperty(scope, 'SetCharacteristics',
           interpreter.createNativeFunction(wrapper));
+
+      wrapper = function(characteristic,newValue) {
+        characteristic = characteristic ? characteristic.toString() : '';
+        newValue = newValue ? newValue.toString() : ""
+        var test = interpreter.createPrimitive(SetCharacteristic(characteristic,newValue));
+        return test;
+      };
+      interpreter.setProperty(scope, 'SetCharacteristic',
+          interpreter.createNativeFunction(wrapper));
+
+      wrapper = function(characteristic,target) {
+        characteristic = characteristic ? characteristic.toString() : '';
+        target = target ? target.toString() : ""
+        var test = interpreter.createPrimitive(GetCharacteristic(characteristic,target));
+        return test;
+      };
+      interpreter.setProperty(scope, 'GetCharacteristic',
+          interpreter.createNativeFunction(wrapper));   
 
     }
     

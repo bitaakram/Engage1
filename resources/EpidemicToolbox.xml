@@ -56,6 +56,9 @@
     <block type="set">
       <field name="NAME">Color</field>
     </block>
+    <block type="set2">
+      <field name="Characteristic">Status</field>
+    </block>
     <block type="simulation">
       <statement name="NAME">
         <block type="insim">
@@ -71,9 +74,9 @@
     </block>
   </category>
   <category name="Activity 3">
-    <block type="triat_of">
-      <field name="name">Color</field>
-      <field name="NAME">Collidee</field>
+    <block type="characteristic_of">
+      <field name="Characteristic">Status</field>
+      <field name="Target">Collidee</field>
     </block>
   </category>
   <category name="Activity 5">

@@ -65,4 +65,13 @@ HttpClient()
         anHttpRequest.send( null );
     }
 }
+runSimulation()
+{
+    console.log("Run Simulation")
+}
+
+SaveWorkspace()
+{
+    console.log("Save Workspace")
+}
 }

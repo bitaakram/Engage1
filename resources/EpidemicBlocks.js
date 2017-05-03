@@ -136,8 +136,8 @@ Blockly.Blocks['collision'] = {
   init: function() {
     this.appendDummyInput()
         .appendField("Collision with")
-        .appendField(new Blockly.FieldDropdown([["Virus","Virus"], ["Person","Person"], ["",""]]), "NAME");
-    this.appendStatementInput("NAME")
+        .appendField(new Blockly.FieldDropdown([["Virus","Virus"], ["Person","Person"], ["",""]]), "CollideeType");
+    this.appendStatementInput("HandleCollision")
         .setCheck(null);
     this.setOutput(true, null);
     this.setColour(260);
@@ -243,10 +243,7 @@ Blockly.JavaScript['turn_right'] = function(block) {
   var code = '\n';
   return code;
 };
-Blockly.JavaScript['collision'] = function(block) {
-  var code = '\n';
-  return code;
-};
+
 Blockly.JavaScript['set'] = function(block) {
   var code = '\n';
   return code;

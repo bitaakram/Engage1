@@ -1,3 +1,11 @@
 <template>
   <h1>Home Page</h1>
+     <nav>
+      <ul>
+         <li repeat.for = "row of router.navigation">
+            <a href.bind = "row.href">${row.title}</a>
+         </li>
+      </ul>
+   </nav>
+
 </template>
