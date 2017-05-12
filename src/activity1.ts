@@ -421,9 +421,11 @@ export class Activity1 {
    PushObject()
    {
         console.log("Push")
+        var url = window.location.protocol + '//' + window.location.hostname
 
         Parse.initialize("myAppId");
-        Parse.serverURL = 'http://localhost:5000/parse'
+        
+        Parse.serverURL = url + '/parse'
 
         var xml = Blockly.Xml.workspaceToDom(this.workspace);
         var xml_text = Blockly.Xml.domToPrettyText(xml);
