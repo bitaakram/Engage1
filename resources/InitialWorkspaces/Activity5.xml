@@ -1,89 +1,45 @@
 <xml xmlns="http://www.w3.org/1999/xhtml">
-  <block type="simulation" id="WrUvnVWFC+T|Yte1A99t" x="1" y="-106">
+  <block type="simulation" id="J=~s)_O[aiLNdmwN,zg1" x="-4" y="-1"></block>
+  <block type="personentity" id=".m`F?FGiSmwEN8wEe4$(" x="-1" y="79">
     <statement name="NAME">
-      <block type="createMulti" id="*B*fyo$j4+xvJ?1c0`aX">
-        <field name="Num">50</field>
-        <field name="Types">People</field>
+      <block type="in1" id="qRDzy`+)-f*lIjyZ^,[I">
+        <value name="NAME">
+          <block type="personchar" id="ifJ`V0kK@W~YT;p*A+9!"></block>
+        </value>
         <next>
-          <block type="createMulti" id="AztwjPGH`7rg5OM^]VC/">
-            <field name="Num">3</field>
-            <field name="Types">Viruses</field>
-            <next>
-              <block type="createMulti" id="*TL^_AWl.9WV*(~7-G|)">
-                <field name="Num">3</field>
-                <field name="Types">Hospital</field>
+          <block type="in1" id="-`?79HZ0_%)j36UwA?Rm">
+            <value name="NAME">
+              <block type="behaviors2" id="]BotVB%P|c*2136}D4Ke">
+                <statement name="NAME">
+                  <block type="in_behaviour" id=";zs9]]7l~Y0/}TD=SRT#">
+                    <next>
+                      <block type="in_behaviour" id="O6md4}O2!RSE$W0G7+3b">
+                        <next>
+                          <block type="in_behaviour" id="*/339FY9OF;qXR.O``=["></block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </statement>
               </block>
-            </next>
+            </value>
           </block>
         </next>
       </block>
     </statement>
   </block>
-  <block type="entity" id="ol{r?Vw4!{5h)ga7b{}|" x="2" y="20">
-    <statement name="Entity">
-      <block type="in1" id="t8`s6b6=;~LC#6(bP_#*">
+  <block type="virusentity" id="uU4K(A|Agd?zyUgQKrY[" x="-1" y="351">
+    <statement name="NAME">
+      <block type="in1" id="~yY}gIDpv`IbhK+v**/W">
         <value name="NAME">
-          <block type="characteristics3" id="=TxNwep+-l2qo/lSVtce">
-            <value name="Type">
-              <block type="type" id="]`P2}ApsbVv]@lg1g6_l">
-                <field name="Type">Man1</field>
-              </block>
-            </value>
-            <value name="Status">
-              <block type="status" id="|irJI|:_g1QX_RhcC9dG">
-                <field name="Status">Healthy</field>
-              </block>
-            </value>
-            <value name="Age">
-              <block type="age" id="/.V0MqL[E^LAbOSFlb:A">
-                <field name="age">0</field>
-              </block>
-            </value>
-          </block>
+          <block type="viruschar" id="l8O@S3T6jgB.nE[fLb@{"></block>
         </value>
         <next>
-          <block type="in1" id="[8iOBd0Qt%n)TZ+[0UI@">
+          <block type="in1" id="vBPCX}`O3Yx;@hLe-(R/">
             <value name="NAME">
-              <block type="behaviors2" id="pVs+H`s~o~@EGO8LE!)W">
+              <block type="behaviors2" id="uHQ|^gB;f%G8T#qH`S?r">
                 <statement name="NAME">
-                  <block type="in_behaviour" id="FY_!y+5v9=Vmo!2KuJi1">
-                    <value name="NAME">
-                      <block type="move" id="F@*~HEc5r03wZR5`1G~1">
-                        <statement name="Move">
-                          <block type="direction" id="-0B6nZgeLpixQEafc}C0">
-                            <field name="Direction">Left</field>
-                          </block>
-                        </statement>
-                      </block>
-                    </value>
-                    <next>
-                      <block type="in_behaviour" id="ue|fit{=eR}uRGX!QXK4">
-                        <value name="NAME">
-                          <block type="collision" id="b]O!k3GKDQWaUo%TG[Lh">
-                            <field name="CollideeType">Virus</field>
-                          </block>
-                        </value>
-                        <next>
-                          <block type="in_behaviour" id="qh_LQwQH1F#UtPg,Rivf">
-                            <value name="NAME">
-                              <block type="collision" id="Z)^a_[JGh/uZ%m[$./.H">
-                                <field name="CollideeType">Virus</field>
-                              </block>
-                            </value>
-                            <next>
-                              <block type="in_behaviour" id="NF;B[?5Z`nT|q|X)[vJK">
-                                <value name="NAME">
-                                  <block type="collision" id="HEsyo`9~}*Se{$O,_B}7">
-                                    <field name="CollideeType">Person</field>
-                                  </block>
-                                </value>
-                              </block>
-                            </next>
-                          </block>
-                        </next>
-                      </block>
-                    </next>
-                  </block>
+                  <block type="in_behaviour" id="g,|,kSu0*pVBN)q1+o%o"></block>
                 </statement>
               </block>
             </value>

@@ -45,17 +45,6 @@ Blockly.Blocks['age'] = {
   }
 };
 
-Blockly.Blocks['in1'] = {
-  init: function() {
-    this.appendValueInput("NAME")
-        .setCheck(null);
-    this.setPreviousStatement(true, null);
-    this.setNextStatement(true, null);
-    this.setColour(160);
-    this.setTooltip('');
-    this.setHelpUrl('');
-  }
-};
 
 Blockly.Blocks['move'] = {
   init: function() {
@@ -164,17 +153,6 @@ Blockly.Blocks['set'] = {
 };
 
 
-Blockly.Blocks['simulation'] = {
-  init: function() {
-    this.appendDummyInput()
-        .appendField("Simulate");
-    this.appendStatementInput("NAME")
-        .setCheck(null);
-    this.setColour(20);
-    this.setTooltip('');
-    this.setHelpUrl('');
-  }
-};
 
 Blockly.Blocks['insim'] = {
   init: function() {
@@ -206,10 +184,6 @@ Blockly.JavaScript['age'] = function(block) {
   var code = '\n';
   return code;
 };
-Blockly.JavaScript['in1'] = function(block) {
-  var code = '\n';
-  return code;
-};
 Blockly.JavaScript['move'] = function(block) {
   var code = '\n';
   return code;
@@ -232,10 +206,6 @@ Blockly.JavaScript['turn_right'] = function(block) {
 };
 
 Blockly.JavaScript['set'] = function(block) {
-  var code = '\n';
-  return code;
-};
-Blockly.JavaScript['simulation'] = function(block) {
   var code = '\n';
   return code;
 };

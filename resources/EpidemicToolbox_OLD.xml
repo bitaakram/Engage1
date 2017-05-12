@@ -1,0 +1,150 @@
+<xml xmlns="http://www.w3.org/1999/xhtml" id="toolbox" style="display: none;">
+  <category name="Activity 1">
+    <block type="spawnblock"></block>
+    <block type="createperson"></block>
+    <block type="status"></block>
+    <block type="entity">
+      <statement name="Entity">
+        <block type="in1">
+          <value name="NAME">
+            <block type="characteristics3">            
+            </block>
+          </value>
+          <next>
+            <block type="in1">
+              <value name="NAME">
+                <block type="behaviors2">
+                  <statement name="NAME">
+                    <block type="in_behaviour"></block>
+                  </statement>
+                </block>
+              </value>
+            </block>
+          </next>
+        </block>
+      </statement>
+    </block>
+    <block type="inchar"></block>
+    <block type="in1"></block>
+    <block type="in_behaviour"></block>
+    <block type="color">
+      <field name="Color">#3366ff</field>
+    </block>
+    <block type="type">
+      <field name="Type">Man1</field>
+    </block>
+    <block type="age">
+      <field name="age">0</field>
+    </block>
+    <block type="move"></block>
+    <block type="direction"></block>
+    <block type="turn_left"></block>
+    <block type="backward"></block>
+    <block type="forward"></block>
+    <block type="turn_right"></block>
+    <block type="simulation">
+      <statement name="NAME">
+        <block type="insim"></block>
+      </statement>
+    </block>
+    <block type="insim"></block>
+  </category>
+  <category name="Activity 2">
+    <block type="collision">
+      <field name="CollideeType">Virus</field>
+    </block>
+    <block type="set">
+      <field name="NAME">Color</field>
+    </block>
+    <block type="set2">
+      <field name="Characteristic">Status</field>
+    </block>
+    <block type="simulation">
+      <statement name="NAME">
+        <block type="insim">
+          <next>
+            <block type="insim"></block>
+          </next>
+        </block>
+      </statement>
+    </block>
+    <block type="createMulti">
+      <field name="Num">0</field>
+      <field name="Types">Person</field>
+    </block>
+  </category>
+  <category name="Activity 3">
+    <block type="characteristic_of">
+      <field name="Characteristic">Status</field>
+      <field name="Target">Collidee</field>
+    </block>
+  </category>
+  <category name="Activity 5">
+    <block type="clock"></block>
+    <block type="gettime"></block>
+    <block type="variables_get">
+      <field name="VAR">Initial_time</field>
+    </block>
+    <block type="variables_set">
+      <field name="VAR">Initial_time</field>
+    </block>
+    <block type="recovery"></block>
+    <block type="simulation">
+      <statement name="NAME">
+        <block type="insim">
+          <next>
+            <block type="insim">
+              <next>
+                <block type="insim"></block>
+              </next>
+            </block>
+          </next>
+        </block>
+      </statement>
+    </block>
+  </category>
+  <category name="General">
+    <block type="controls_if"></block>
+    <block type="logic_compare">
+      <field name="OP">EQ</field>
+    </block>
+    <block type="logic_operation">
+      <field name="OP">AND</field>
+    </block>
+    <block type="math_arithmetic">
+      <field name="OP">ADD</field>
+      <value name="A">
+        <shadow type="math_number">
+          <field name="NUM">1</field>
+        </shadow>
+      </value>
+      <value name="B">
+        <shadow type="math_number">
+          <field name="NUM">1</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="math_number">
+      <field name="NUM">0</field>
+    </block>
+    <block type="math_random_int">
+      <value name="FROM">
+        <shadow type="math_number">
+          <field name="NUM">1</field>
+        </shadow>
+      </value>
+      <value name="TO">
+        <shadow type="math_number">
+          <field name="NUM">100</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="controls_repeat_ext">
+      <value name="TIMES">
+        <shadow type="math_number">
+          <field name="NUM">10</field>
+        </shadow>
+      </value>
+    </block>
+  </category>
+</xml>
