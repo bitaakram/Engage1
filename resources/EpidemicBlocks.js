@@ -188,20 +188,7 @@ Blockly.Blocks['insim'] = {
   }
 };
 
-Blockly.Blocks['create'] = {
-  init: function() {
-    this.appendDummyInput()
-        .appendField("Create")
-        .appendField(new Blockly.FieldNumber(0), "NAME")
-        .appendField("# of")
-        .appendField(new Blockly.FieldDropdown([["People","Peaple"], ["Viruses","People"]]), "Types");
-    this.setInputsInline(true);
-    this.setOutput(true, null);
-    this.setColour(45);
-    this.setTooltip('');
-    this.setHelpUrl('');
-  }
-};
+
 
 Blockly.JavaScript['entity'] = function(block) {
   var code = '\n';
@@ -262,7 +249,20 @@ Blockly.JavaScript['create'] = function(block) {
 };
 
 
-
+Blockly.Blocks['create'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Create")
+        .appendField(new Blockly.FieldNumber(0), "NAME")
+        .appendField("# of")
+        .appendField(new Blockly.FieldDropdown([["People","Peaple"], ["Viruses","People"], ["Hospital","Hospital"]]), "Types");
+    this.setInputsInline(true);
+    this.setOutput(true, null);
+    this.setColour(45);
+    this.setTooltip('');
+    this.setHelpUrl('');
+  }
+};
 
 
 Blockly.Blocks['triat_of'] = {

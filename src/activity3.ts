@@ -458,22 +458,6 @@ export class Activity3 {
         }
     }
   }
-  runCode(){
-    this.paralellTest();
-    var code = Blockly.JavaScript.workspaceToCode(this.workspace);
-    console.log(code);
-    var interpreter = new Interpreter(code,this.initApi);
-    interpreter.run()
-    /*
-    Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
-    try {
-      eval(code);
-    } catch (e) {
-      alert(MSG['badCode'].replace('%1', e));
-    }
-    */
-  }
-
   
   initApi(interpreter, scope) {
   // Add an API function for the alert() block.

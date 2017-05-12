@@ -51,7 +51,7 @@
   </category>
   <category name="Activity 2">
     <block type="collision">
-      <field name="NAME">Virus</field>
+      <field name="CollideeType">Virus</field>
     </block>
     <block type="set">
       <field name="NAME">Color</field>
@@ -68,9 +68,9 @@
         </block>
       </statement>
     </block>
-    <block type="create">
-      <field name="NAME">0</field>
-      <field name="Types">OPTIONNAME</field>
+    <block type="createMulti">
+      <field name="Num">0</field>
+      <field name="Types">Person</field>
     </block>
   </category>
   <category name="Activity 3">

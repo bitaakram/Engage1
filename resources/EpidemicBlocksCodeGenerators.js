@@ -226,3 +226,27 @@ Blockly.JavaScript['characteristic_of'] = function(block) {
   var code = 'GetCharacteristic(\"' + char_type + '\",\"' + target + '\")';
   return [code];
 };
+
+Blockly.Blocks['createMulti'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Create")
+        .appendField(new Blockly.FieldNumber(0), "Num")
+        .appendField("# of")
+        .appendField(new Blockly.FieldDropdown([["People","People"], ["Viruses","Viruses"], ["Hospital","Hospital"]]), "Types");
+    this.setInputsInline(true);
+    this.setOutput(false, null);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(45);
+    this.setTooltip('');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.JavaScript['createMulti'] = function(block) {
+  var dropdown_types = block.getFieldValue('Types');
+  var number_num = block.getFieldValue('Num');
+  var code = "CreateMultipleEntities(" + number_num + ",\"" + dropdown_types + "\")\n"; 
+  return code;
+};

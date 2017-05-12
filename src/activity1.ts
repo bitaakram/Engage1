@@ -4,7 +4,6 @@ var myApp
 
 var EntityProperties = {};
 
-
 function preload() {
     myApp.game.load.image('Man1', 'assets/Man1.png');
     myApp.game.load.image('Man2', 'assets/Man2.png');
@@ -302,19 +301,6 @@ export class Activity1 {
     create();
   }
 
-  setColor(targetColor)
-  {
-    if(targetColor == "RED")
-    {
-        ball2.loadTexture('redball');
-    }
-    else if(targetColor == "BLUE")
-    {
-        ball2.loadTexture('blueball');
-    }
-    myApp.game.physics.arcade.collide(ball1, ball2);
-  }
-
   handleCollision()
   {
     var allXml = Blockly.Xml.workspaceToDom(this.workspace).childNodes;
@@ -394,19 +380,6 @@ export class Activity1 {
       interpreter.setProperty(scope, 'alert',
           interpreter.createNativeFunction(wrapper));
 
-      wrapper = function(text) {
-        text = text ? text.toString() : '';
-        return interpreter.createPrimitive(myApp.setColor(text));
-      };
-      interpreter.setProperty(scope, 'SetColor',
-          interpreter.createNativeFunction(wrapper));
-      
-      wrapper = function() {
-        var test = interpreter.createPrimitive(MoveBallRight());
-        return test;
-      };
-      interpreter.setProperty(scope, 'MoveBallRight',
-          interpreter.createNativeFunction(wrapper));    
 
      wrapper = function() {
         var test = interpreter.createPrimitive(CreatePerson("Person"));
@@ -431,7 +404,7 @@ export class Activity1 {
       interpreter.setProperty(scope, 'MoveEntity',
           interpreter.createNativeFunction(wrapper));
 
-      wrapper = function(text,age,status) {
+    wrapper = function(text,age,status) {
         text = text ? text.toString() : '';
         status = status ? status.toString() : ""
         age = age ? age.toString() : ""

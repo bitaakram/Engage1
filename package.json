@@ -15,11 +15,16 @@
   },
   "license": "MIT",
   "dependencies": {
-    "aurelia-bootstrapper": "^2.1.0",
+    "@types/gapi": "0.0.32",
     "aurelia-animator-css": "^1.0.1",
+    "aurelia-bootstrapper": "^2.1.0",
     "bluebird": "^3.4.1",
     "requirejs": "^2.3.2",
-    "text": "github:requirejs/text#latest"
+    "text": "github:requirejs/text#latest",
+    "express": "~4.11.x",
+    "kerberos": "~0.0.x",
+    "parse": "~1.8.0",
+    "parse-server": "*"
   },
   "peerDependencies": {},
   "devDependencies": {
