@@ -37,6 +37,8 @@ function SetCharacteristics(type,age,status)
     EntityProperties.status = status;
 }
 
+
+
 function GetCharacteristics()
 {
     //Get Entity Block
@@ -416,7 +418,34 @@ export class Activity1 {
 
     }
     
-    
+   PushObject()
+   {
+        console.log("Push")
+
+        Parse.initialize("myAppId");
+        Parse.serverURL = 'http://localhost:5000/parse'
+
+        var xml = Blockly.Xml.workspaceToDom(this.workspace);
+        var xml_text = Blockly.Xml.domToPrettyText(xml);
+
+        var GameScore = Parse.Object.extend("GameScore");
+        var gameScore = new GameScore();
+
+        gameScore.set("workspace", xml_text) ;
+        
+        gameScore.save(null, {
+        success: function(gameScore) {
+            // Execute any logic that should take place after the object is saved.
+            alert('New object created with objectId: ' + gameScore.id);
+        },
+        error: function(gameScore, error) {
+            // Execute any logic that should take place if the save fails.
+            // error is a Parse.Error with an error code and message.
+            alert('Failed to create new object, with error code: ' + error.message);
+        }
+        });
+
+   }
 
 
 }
