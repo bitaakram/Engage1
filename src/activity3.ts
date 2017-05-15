@@ -23,6 +23,37 @@ function preload() {
     myApp.game.load.image('Virus3', 'assets/Virus3.png');
 }
 
+function CreateMultipleEntities(num,type)
+{
+    console.log("Here")
+    if(num <= 0)
+        return;
+
+    var x=0;
+
+    if(type == "People")
+    {
+        for(x=0;x<num;x++)
+        {
+            CreatePerson();
+        }
+    }
+    else if(type == "Hospital")
+    {
+        for(x=0;x<num;x++)
+        {
+            console.log("HOSPITAL")
+        }
+
+    }
+    else if (type == "Viruses")
+    {
+        for(x=0;x<num;x++)
+        {
+            CreateVirus();
+        }
+    }
+}
 
 function create() {
     //  We're going to be using physics, so enable the Arcade Physics system
@@ -40,7 +71,8 @@ function create() {
 
 function update(){
      myApp.game.physics.arcade.collide(myApp.Persons, myApp.Viruses, myApp.PersonVirusCollision.bind(myApp), null, this); 
-     myApp.game.physics.arcade.collide(myApp.Persons, myApp.Persons, myApp.PersonPersonCollision.bind(myApp), null, this);    
+     myApp.game.physics.arcade.collide(myApp.Persons, myApp.Persons, myApp.PersonPersonCollision.bind(myApp), null, this);  
+     myApp.game.physics.arcade.collide(myApp.Viruses, myApp.Viruses, null, null, this);  
 }
 
 function SetCharacteristics(type,age,status)
@@ -48,6 +80,11 @@ function SetCharacteristics(type,age,status)
     PersonProperties.type = type;
     PersonProperties.age = age;
     PersonProperties.status = status;
+}
+
+function SetVirusCharacteristics(virusType)
+{
+    VirusProperties.type = virusType;
 }
 
 function GetCharacteristic(chartype, target)
@@ -75,24 +112,6 @@ function GetCharacteristic(chartype, target)
 
 }
 
-function GetCharacteristics()
-{
-    //Get Entity Block
-    var allXml = Blockly.Xml.workspaceToDom(myApp.workspace).childNodes;
-    for (var i = 0; xml = allXml[i]; i++) {
-        var xml = allXml[i];
-        if(xml.getAttribute('type')=='entity')
-        {
-          var in1 = xml.firstElementChild.firstElementChild;      
-          var headless = new Blockly.Workspace();
-          Blockly.Xml.domToBlock(in1, headless);
-          var code = Blockly.JavaScript.workspaceToCode(headless);
-          var interpreter = new Interpreter(code,myApp.initApi);
-          interpreter.run()
-          headless.dispose();
-        }
-    }
-}
 
 function SetCharacteristic(field,newValue)
 {
@@ -120,35 +139,60 @@ function SetCharacteristic(field,newValue)
         
 }
 
-function CreateEntity(entityLabel)
+function GetCharacteristics(entityType)
 {
-    if(entityLabel == "Person")
-    {
-        CreatePerson()
-    }
-    else if(entityLabel == "Virus")
-    {
-        CreateVirus()
+    //Get Entity Block
+    var allXml = Blockly.Xml.workspaceToDom(myApp.workspace).childNodes;
+    for (var i = 0; xml = allXml[i]; i++) {
+        var xml = allXml[i];
+        if(xml.getAttribute('type')== entityType)
+        {
+          var in1 = xml.firstElementChild.firstElementChild;      
+          var headless = new Blockly.Workspace();
+          Blockly.Xml.domToBlock(in1, headless);
+          var code = Blockly.JavaScript.workspaceToCode(headless);
+          var interpreter = new Interpreter(code,myApp.initApi);
+          interpreter.run()
+          headless.dispose();
+        }
     }
 }
 
 function CreateVirus()
 {
-    //GetCharacteristics();
-    var spriteName = "Virus1"//PersonProperties.type;
+    GetCharacteristics("virusentity");
+    var spriteName = VirusProperties.type;
 
-    var c = myApp.Viruses.create(400, 300, spriteName);
+    var c = myApp.Viruses.create(myApp.game.world.randomX, myApp.game.world.randomY, spriteName);
+    c.scale = new Phaser.Point(1,1);
+    c.anchor.set(.5);
+    c.body.setSize(5,60,23,15)
+    //c.body.immovable = true;
+
+    myApp.currentGameObject = c;
+    myApp.currentGameObject.body.collideWorldBounds = true;
+    myApp.currentGameObject.body.bounce.set(1);
+    CheckBehaviors("virusentity")
+}
+
+function CreateHospital()
+{
+     //GetCharacteristics();
+    var spriteName = "Hospital1"
+
+    var c = myApp.Hospitals.create(myApp.game.world.randomX, myApp.game.world.randomY, spriteName);
     c.scale = new Phaser.Point(1,1);
     c.anchor.set(.5);
 
     myApp.currentGameObject = c;
     myApp.currentGameObject.body.collideWorldBounds = true;
     myApp.currentGameObject.body.bounce.set(1);
+    c.body.immovable = true;
 }
 
 function CreatePerson()
 {
-    GetCharacteristics();
+    GetCharacteristics("personentity");
 
     var spriteName = PersonProperties.type;
 
@@ -175,16 +219,15 @@ function CreatePerson()
     myApp.currentGameObject = c;
     myApp.currentGameObject.body.collideWorldBounds = true;
     myApp.currentGameObject.body.bounce.set(1);
-    CheckBehaviors();
+    CheckBehaviors("personentity");
 }
-
-function CheckBehaviors()
+function CheckBehaviors(entityType)
 {
     //Get Move Block
     var allXml = Blockly.Xml.workspaceToDom(myApp.workspace).childNodes;
     for (var i = 0; xml = allXml[i]; i++) {
         var xml = allXml[i];
-        if(xml.getAttribute('type')=='entity')
+        if(xml.getAttribute('type')== entityType)
         {
           //Get Behavior Blocks
           var childBlocks = xml.getElementsByTagName("block");
@@ -217,7 +260,7 @@ function GetCollisionBlockFromEntity(person,target)
     var allXml = Blockly.Xml.workspaceToDom(myApp.workspace).childNodes;
     for (var i = 0; xml = allXml[i]; i++) {
         var xml = allXml[i];
-        if(xml.getAttribute('type')=='entity')
+        if(xml.getAttribute('type')=='personentity')
         {
           //Get Behavior Blocks
           var childBlocks = xml.getElementsByTagName("block");
@@ -508,6 +551,14 @@ export class Activity3 {
       interpreter.setProperty(scope, 'SetCharacteristics',
           interpreter.createNativeFunction(wrapper));
 
+    wrapper = function(text) {
+        text = text ? text.toString() : '';
+        var test = interpreter.createPrimitive(SetVirusCharacteristics(text));
+        return test;
+      };
+      interpreter.setProperty(scope, 'SetVirusCharacteristics',
+          interpreter.createNativeFunction(wrapper));
+
       wrapper = function(characteristic,newValue) {
         characteristic = characteristic ? characteristic.toString() : '';
         newValue = newValue ? newValue.toString() : ""
@@ -524,7 +575,16 @@ export class Activity3 {
         return test;
       };
       interpreter.setProperty(scope, 'GetCharacteristic',
-          interpreter.createNativeFunction(wrapper));   
+          interpreter.createNativeFunction(wrapper)); 
+
+      wrapper = function(number,text) {
+        text = text ? text.toString() : '';
+        number = number ? number.toString() : ""
+        var test = interpreter.createPrimitive(CreateMultipleEntities(number,text));
+        return test;
+      };
+      interpreter.setProperty(scope, 'CreateMultipleEntities',
+          interpreter.createNativeFunction(wrapper));    
 
     }
     

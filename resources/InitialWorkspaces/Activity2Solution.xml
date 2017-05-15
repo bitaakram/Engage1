@@ -1,0 +1,117 @@
+<xml xmlns="http://www.w3.org/1999/xhtml">
+  <block type="simulation" id="J=~s)_O[aiLNdmwN,zg1" deletable="false" x="-4" y="-1">
+    <statement name="NAME">
+      <block type="createMulti" id="[#p(OEPgZt]OFNExtv0M">
+        <field name="Num">2</field>
+        <field name="Types">Viruses</field>
+        <next>
+          <block type="createMulti" id="8q`=sV}:D%_u8,$~]`kb">
+            <field name="Num">5</field>
+            <field name="Types">People</field>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="personentity" id=".m`F?FGiSmwEN8wEe4$(" deletable="false" x="-1" y="101">
+    <statement name="NAME">
+      <block type="in1" id="qRDzy`+)-f*lIjyZ^,[I" movable="false">
+        <value name="NAME">
+          <block type="personchar" id="ifJ`V0kK@W~YT;p*A+9!" movable="false">
+            <value name="Type">
+              <block type="persontype" id="cl3|Fx5Fdj]pMaOaWlE`">
+                <field name="Type">Man1</field>
+              </block>
+            </value>
+            <value name="Status">
+              <block type="status" id="S0A67OXnDaTURY]E8YoN">
+                <field name="Status">Healthy</field>
+              </block>
+            </value>
+            <value name="Age">
+              <block type="age" id="W)Vld~|Wgg$T`JnDS`B+">
+                <field name="age">0</field>
+              </block>
+            </value>
+          </block>
+        </value>
+        <next>
+          <block type="in1" id="-`?79HZ0_%)j36UwA?Rm" movable="false">
+            <value name="NAME">
+              <block type="behaviors2" id="]BotVB%P|c*2136}D4Ke" movable="false">
+                <statement name="NAME">
+                  <block type="in_behaviour" id=";zs9]]7l~Y0/}TD=SRT#">
+                    <value name="NAME">
+                      <block type="move" id="V3W`fgAU7Msg:C@n/[#q">
+                        <statement name="Move">
+                          <block type="direction" id="ILs?9.0+58VaIX/5U#.H">
+                            <field name="Direction">Random</field>
+                          </block>
+                        </statement>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="in_behaviour" id="+t8lD7|et/pxfaW]aWf#">
+                        <value name="NAME">
+                          <block type="collision" id="ldVnAnR6gi?hf)m.8(sk">
+                            <field name="NAME">Virus</field>
+                            <statement name="HandleCollision">
+                              <block type="set2" id="I.c1F;VNlh.^ZF]@[?EJ">
+                                <field name="Characteristic">Status</field>
+                                <value name="NewValue">
+                                  <block type="status" id="%7H~c4~2WVvS]x2r=|b-">
+                                    <field name="Status">Sick</field>
+                                  </block>
+                                </value>
+                              </block>
+                            </statement>
+                          </block>
+                        </value>
+                      </block>
+                    </next>
+                  </block>
+                </statement>
+              </block>
+            </value>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="virusentity" id="uU4K(A|Agd?zyUgQKrY[" deletable="false" x="-3" y="427">
+    <statement name="NAME">
+      <block type="in1" id="~yY}gIDpv`IbhK+v**/W" movable="false">
+        <value name="NAME">
+          <block type="viruschar" id="l8O@S3T6jgB.nE[fLb@{" movable="false">
+            <value name="Type">
+              <block type="virustype" id="h:-.Ui06%d:%SONfl,wQ">
+                <field name="Type">Virus1</field>
+              </block>
+            </value>
+          </block>
+        </value>
+        <next>
+          <block type="in1" id="vBPCX}`O3Yx;@hLe-(R/" movable="false">
+            <value name="NAME">
+              <block type="behaviors2" id="uHQ|^gB;f%G8T#qH`S?r" movable="false">
+                <statement name="NAME">
+                  <block type="in_behaviour" id="g,|,kSu0*pVBN)q1+o%o">
+                    <value name="NAME">
+                      <block type="move" id="WbLKv5VPx@4*fL?vZiO]">
+                        <statement name="Move">
+                          <block type="direction" id="8eo|^}S@WVNj5@*UZ1m~">
+                            <field name="Direction">Random</field>
+                          </block>
+                        </statement>
+                      </block>
+                    </value>
+                  </block>
+                </statement>
+              </block>
+            </value>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+</xml>

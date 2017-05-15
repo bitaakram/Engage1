@@ -2,7 +2,7 @@ var myApp
 var responseText
 var myApp
 
-var EntityProperties = {};
+var PersonProperties = {};
 
 function preload() {
     myApp.game.load.image('Man1', 'assets/Man1.png');
@@ -14,6 +14,16 @@ function preload() {
     myApp.game.load.image('Man2Sick', 'assets/Man2_sick.png');
     myApp.game.load.image('Woman1Sick', 'assets/Woman1_sick.png');
     myApp.game.load.image('Woman2Sick', 'assets/Woman2_sick.png');
+
+    myApp.game.load.image('Virus1', 'assets/Virus1.png');
+    myApp.game.load.image('Virus2', 'assets/Virus2.png');
+    myApp.game.load.image('Virus3', 'assets/Virus3.png');
+
+    myApp.game.load.image('Hospital1', 'assets/Hospital1.png');
+    myApp.game.load.image('Hospital2', 'assets/Hospital2.png');
+    myApp.game.load.image('Hospital3', 'assets/Hospital3.png');
+
+
 }
 
 
@@ -21,20 +31,144 @@ function create() {
     //  We're going to be using physics, so enable the Arcade Physics system
     myApp.game.stage.backgroundColor = "#dbd6d7";
     myApp.game.physics.startSystem(Phaser.Physics.ARCADE);
-    myApp.Entities = myApp.game.add.group();
-    myApp.Entities.enableBody = true;
-    myApp.Entities.physicsBodyType = Phaser.Physics.ARCADE;
+
+    myApp.Persons = myApp.game.add.group();
+    myApp.Persons.enableBody = true;
+    myApp.Persons.physicsBodyType = Phaser.Physics.ARCADE;
+
+    myApp.Viruses = myApp.game.add.group();
+    myApp.Viruses.enableBody = true;
+    myApp.Viruses.physicsBodyType = Phaser.Physics.ARCADE;
+
+    myApp.Hospitals = myApp.game.add.group();
+    myApp.Hospitals.enableBody = true;
+    myApp.Hospitals.physicsBodyType = Phaser.Physics.ARCADE;
 }
 
 function update(){
     
+    myApp.game.physics.arcade.collide(myApp.Persons, myApp.Persons, null, null, this);
+    myApp.game.physics.arcade.collide(myApp.Persons, myApp.Viruses, null, null, this);
+    myApp.game.physics.arcade.collide(myApp.Persons, myApp.Hospitals, null, null, this);
+    myApp.game.physics.arcade.collide(myApp.Viruses, myApp.Viruses, null, null, this);
+
 }
+
+function CreateMultipleEntities(num,type)
+{
+    if(num <= 0)
+        return;
+
+    var x=0;
+
+    if(type == "People")
+    {
+        for(x=0;x<num;x++)
+        {
+            CreatePerson();
+        }
+    }
+    else if(type == "Hospital")
+    {
+        for(x=0;x<num;x++)
+        {
+            console.log("HOSPITAL")
+        }
+
+    }
+    else if (type == "Viruses")
+    {
+        for(x=0;x<num;x++)
+        {
+            CreateVirus();
+        }
+    }
+}
+function CreateVirus()
+{
+    //GetCharacteristics();
+    var spriteName = "Virus1"
+
+    var c = myApp.Viruses.create(myApp.game.world.randomX, myApp.game.world.randomY, spriteName);
+    c.scale = new Phaser.Point(1,1);
+    c.anchor.set(.5);
+    c.body.setSize(5,60,23,15)
+    //c.body.immovable = true;
+
+    myApp.currentGameObject = c;
+    myApp.currentGameObject.body.collideWorldBounds = true;
+    myApp.currentGameObject.body.bounce.set(1);
+}
+
+function CreateHospital()
+{
+     //GetCharacteristics();
+    var spriteName = "Hospital1"
+
+    var c = myApp.Hospitals.create(myApp.game.world.randomX, myApp.game.world.randomY, spriteName);
+    c.scale = new Phaser.Point(1,1);
+    c.anchor.set(.5);
+
+    myApp.currentGameObject = c;
+    myApp.currentGameObject.body.collideWorldBounds = true;
+    myApp.currentGameObject.body.bounce.set(1);
+    c.body.immovable = true;
+}
+
+function CreatePerson()
+{
+    GetCharacteristics();
+
+    var spriteName = PersonProperties.type;
+
+    if(PersonProperties.status == "Sick")
+    {
+        spriteName += "Sick";
+    }
+
+    var c = {}
+    if(myApp.Persons.length == 0)
+    {
+        c = myApp.Persons.create(100, 300, spriteName);
+    }
+    else
+    {
+        c = myApp.Persons.create(myApp.game.world.randomX, myApp.game.world.randomY, spriteName);
+    }
+    
+    c.scale = new Phaser.Point(1,1);
+    c.anchor.set(.5);
+    c.type = PersonProperties.type;
+    c.age = PersonProperties.age;
+    c.status = PersonProperties.status;
+   
+    var style = { font: "16px Courier", fill: "#000000" };
+    var text1 = myApp.game.add.text(16, -30, "Age: "+c.age.toString(), style);
+    var text2 = myApp.game.add.text(16, 0, "Type: "+c.type, style);
+    var text3 = myApp.game.add.text(16, 30, "Status: "+c.status, style);
+
+    //text1.alignTo(c, Phaser.RIGHT_TOP, 16);
+    //text2.alignTo(c, Phaser.RIGHT_CENTER, 16);
+    //text3.alignTo(c, Phaser.RIGHT_BOTTOM, 16);
+
+    c.addChild(text1);
+    c.addChild(text2);
+    c.addChild(text3);
+
+    myApp.currentGameObject = c;
+    myApp.currentGameObject.body.collideWorldBounds = true;
+    myApp.currentGameObject.body.bounce.set(1);
+    CheckBehaviors();
+}
+
+
+
 
 function SetCharacteristics(type,age,status)
 {
-    EntityProperties.type = type;
-    EntityProperties.age = age;
-    EntityProperties.status = status;
+    PersonProperties.type = type;
+    PersonProperties.age = age;
+    PersonProperties.status = status;
 }
 
 
@@ -45,7 +179,7 @@ function GetCharacteristics()
     var allXml = Blockly.Xml.workspaceToDom(myApp.workspace).childNodes;
     for (var i = 0; xml = allXml[i]; i++) {
         var xml = allXml[i];
-        if(xml.getAttribute('type')=='entity')
+        if(xml.getAttribute('type')=='personentity')
         {
           var in1 = xml.firstElementChild.firstElementChild;      
           var headless = new Blockly.Workspace();
@@ -58,13 +192,13 @@ function GetCharacteristics()
     }
 }
 
-function CreatePerson(entityLabel)
+function CreatePerson1(entityLabel)
 {
     GetCharacteristics();
 
-    var spriteName = EntityProperties.type;
+    var spriteName = PersonProperties.type;
 
-    if(EntityProperties.status == "Sick")
+    if(PersonProperties.status == "Sick")
     {
         spriteName += "Sick";
     }
@@ -72,9 +206,9 @@ function CreatePerson(entityLabel)
     var c = myApp.Entities.create(200, 200, spriteName);
     c.scale = new Phaser.Point(1,1);
     c.anchor.set(.5);
-    c.type = EntityProperties.type;
-    c.age = EntityProperties.age;
-    c.status = EntityProperties.status;
+    c.type = PersonProperties.type;
+    c.age = PersonProperties.age;
+    c.status = PersonProperties.status;
 
     var style = { font: "16px Courier", fill: "#000000" };
     var text1 = myApp.game.add.text(16, -30, "Age: "+c.age.toString(), style);
@@ -100,7 +234,7 @@ function CheckBehaviors()
     var allXml = Blockly.Xml.workspaceToDom(myApp.workspace).childNodes;
     for (var i = 0; xml = allXml[i]; i++) {
         var xml = allXml[i];
-        if(xml.getAttribute('type')=='entity')
+        if(xml.getAttribute('type')=='personentity')
         {
           //Get Behavior Blocks
           var childBlocks = xml.getElementsByTagName("block");
@@ -340,7 +474,7 @@ export class Activity1 {
     //Get WhenRun Head
     //Run code
     var test = Blockly.JavaScript.workspaceToCode(this.workspace)
-    console.log(test);
+    //console.log(test);
 
     var allXml = Blockly.Xml.workspaceToDom(this.workspace).childNodes;
     for (var i = 0; xml = allXml[i]; i++) {
@@ -416,7 +550,18 @@ export class Activity1 {
       interpreter.setProperty(scope, 'SetCharacteristics',
           interpreter.createNativeFunction(wrapper));
 
+
+    wrapper = function(number,text) {
+            text = text ? text.toString() : '';
+            number = number ? number.toString() : ""
+            var test = interpreter.createPrimitive(CreateMultipleEntities(number,text));
+            return test;
+        };
+        interpreter.setProperty(scope, 'CreateMultipleEntities',
+            interpreter.createNativeFunction(wrapper));
+
     }
+     
     
    PushObject()
    {

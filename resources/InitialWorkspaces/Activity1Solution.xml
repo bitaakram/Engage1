@@ -1,0 +1,56 @@
+<xml xmlns="http://www.w3.org/1999/xhtml">
+  <block type="simulation" id="J=~s)_O[aiLNdmwN,zg1" deletable="false" x="-4" y="-1">
+    <statement name="NAME">
+      <block type="createMulti" id="eTe_3+tSncq#}/zA,X0?">
+        <field name="Num">5</field>
+        <field name="Types">People</field>
+      </block>
+    </statement>
+  </block>
+  <block type="personentity" id=".m`F?FGiSmwEN8wEe4$(" deletable="false" x="-1" y="90">
+    <statement name="NAME">
+      <block type="in1" id="qRDzy`+)-f*lIjyZ^,[I" movable="false">
+        <value name="NAME">
+          <block type="personchar" id="ifJ`V0kK@W~YT;p*A+9!" movable="false">
+            <value name="Type">
+              <block type="persontype" id="};(.cNDN?lYtNr}C9BR5">
+                <field name="Type">Man2</field>
+              </block>
+            </value>
+            <value name="Status">
+              <block type="status" id="hG{(.HGC;HpAJQJs`kL?">
+                <field name="Status">Healthy</field>
+              </block>
+            </value>
+            <value name="Age">
+              <block type="age" id="/Hv,tH]J%KymZH)Yxl[e">
+                <field name="age">0</field>
+              </block>
+            </value>
+          </block>
+        </value>
+        <next>
+          <block type="in1" id="-`?79HZ0_%)j36UwA?Rm" movable="false">
+            <value name="NAME">
+              <block type="behaviors2" id="]BotVB%P|c*2136}D4Ke" movable="false">
+                <statement name="NAME">
+                  <block type="in_behaviour" id=";zs9]]7l~Y0/}TD=SRT#">
+                    <value name="NAME">
+                      <block type="move" id="G$ha.|m.~dcq(@]I.AqF">
+                        <statement name="Move">
+                          <block type="direction" id="Zho|vuB3[ts_sEjMJon7">
+                            <field name="Direction">Random</field>
+                          </block>
+                        </statement>
+                      </block>
+                    </value>
+                  </block>
+                </statement>
+              </block>
+            </value>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+</xml>

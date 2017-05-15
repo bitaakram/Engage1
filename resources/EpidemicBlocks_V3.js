@@ -1,15 +1,3 @@
-Blockly.Blocks['move'] = {
-  init: function() {
-    this.appendDummyInput()
-        .appendField("Move");
-    this.appendStatementInput("NAME")
-        .setCheck(null);
-    this.setOutput(true, null);
-    this.setColour(260);
-    this.setTooltip('');
-    this.setHelpUrl('');
-  }
-};
 
 Blockly.Blocks['collision'] = {
   init: function() {
@@ -17,7 +5,7 @@ Blockly.Blocks['collision'] = {
         .appendField("Collision")
         .appendField("With")
         .appendField(new Blockly.FieldDropdown([["Virus","Virus"], ["Person","Person"]]), "NAME");
-    this.appendStatementInput("NAME")
+    this.appendStatementInput("HandleCollision")
         .setCheck(null);
     this.setOutput(true, null);
     this.setColour(260);
