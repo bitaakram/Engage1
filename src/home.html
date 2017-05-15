@@ -1,11 +1,13 @@
 <template>
-  <h1>Home Page</h1>
+  <h1>Welcome to Engage</h1>
      <nav>
-      <ul>
-         <li repeat.for = "row of router.navigation">
-            <a href.bind = "row.href">${row.title}</a>
-         </li>
-      </ul>
+    <form submit.trigger="login()">
+      <input type="text" value.bind="username"> <br>
+      <input type="password" value.bind="password"> <br>
+      <button type="submit">Login</button>
+    </form>
+    
+    <button type="button" click.trigger="signup()">Sign Up</button>
    </nav>
 
 </template>

@@ -16,7 +16,10 @@
   <div data-sticky-container>
     <div class="main-nav" data-sticky data-options="marginTop:0;" style="width:100%" data-top-anchor="1" data-btm-anchor="content:bottom">    
       <div class="main-nav-left">
-        <a class="logo" href="#">ENGAGE</a> <!--  Change to homepage for Engage IntelliBlocks -->
+        <span class="logo">ENGAGE</span> 
+      </div>
+      <div class="main-nav-right">
+        <a class="logo" click.trigger="LogOut()">LogOut</a> 
       </div>
     </div>
   </div>
@@ -41,9 +44,9 @@
             </ul>
         </div>
         <div class="instructions-button" click.trigger="runSimulation()"> Run</a></div>
-        <div class="hint-button" click.trigger="SaveWorkspace()"> Save </div>
-        <div class="instructions-button" click.trigger="PushObject()"> Test</a></div>
-         
+        <div class="instructions-button" click.trigger="PushObject()"> Save</a></div>
+        <div class="hint-button" click.trigger="SaveWorkspace()"> Debug(SaveToDisk) </div> 
+        <div class="instructions-button" click.trigger="LoadLastSave()"> Load</a></div>
       </div>
 
 

@@ -18,6 +18,9 @@
       <div class="main-nav-left">
         <a class="logo" href="#">ENGAGE</a> <!--  Change to homepage for Engage IntelliBlocks -->
       </div>
+      <div class="main-nav-right">
+        <a class="logo" click.trigger="LogOut()">LogOut</a> 
+      </div>
     </div>
   </div>
 
@@ -40,11 +43,9 @@
                     </li>
             </ul>
         </div>
-        
         <div class="instructions-button" click.trigger="runSimulation()"> Run</a></div>
-        <div class="hint-button" click.trigger="SaveWorkspace()"> Save </div>
-        
-         
+        <div class="instructions-button" click.trigger="PushObject()"> Save</a></div>
+        <div class="hint-button" click.trigger="SaveWorkspace()"> Debug(SaveToDisk) </div> 
       </div>
 
 

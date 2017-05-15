@@ -1,3 +1,7 @@
+import {inject} from 'aurelia-framework';
+import {RouterConfiguration, Router} from 'aurelia-router';
+
+
 var myApp
 var responseText
 var targetHeading
@@ -427,7 +431,7 @@ function MoveEntity(direction)
     }
 }
 
-
+@inject(Router)
 export class Activity5 {
   workspace = {};
   interpreter = {};
@@ -437,9 +441,15 @@ export class Activity5 {
   TimeStamp = 0;
   SampleRate;
   TimerId;
+  activityName;
 
-  constructor() {
+  constructor(router) {
     myApp = this;
+    var url = window.location.protocol + '//' + window.location.hostname;
+    Parse.initialize("myAppId");    
+    Parse.serverURL = url + ":" + location.port + '/parse';
+    this.router = router;
+    this.activityName = "Part4";
   }
 
   //before view-model renders
@@ -544,9 +554,14 @@ HttpClient()
 
   LoadInitialWorkspace()
   {
-      var url = "resources/InitialWorkspaces/Activity5.xml";
-      var client = new this.HttpClient();
-      client.get(url, this.LoadWorkspaceCallback);
+      myApp.workspace.clear();
+      this.LoadLastSave();
+      if(myApp.workspace.getAllBlocks().length == 0)
+      {
+        var url = "resources/InitialWorkspaces/Activity5.xml";
+        var client = new this.HttpClient();
+        client.get(url, this.LoadWorkspaceCallback);
+      }
   }
 
   LoadToolBoxCallback(ResponseText)
@@ -749,6 +764,72 @@ HttpClient()
       interpreter.setProperty(scope, 'CreateMultipleEntities',
           interpreter.createNativeFunction(wrapper));    
 
+    }
+
+    PushObject()
+    {
+        var currentUser = Parse.User.current();
+        if(currentUser)
+        {
+            var xml = Blockly.Xml.workspaceToDom(this.workspace);
+            var xml_text = Blockly.Xml.domToPrettyText(xml);
+
+            var GameScore = Parse.Object.extend("GameScore");
+            var gameScore = new GameScore();
+
+            gameScore.set("workspace", xml_text) ;
+            gameScore.set("username",currentUser.getUsername());
+            gameScore.set("sessionToken",currentUser.getSessionToken());
+            gameScore.set("ActivityName",this.activityName);
+            
+        
+            gameScore.save(null, {
+                success: function(gameScore) {
+                    // Execute any logic that should take place after the object is saved.
+                    alert('Workspace Saved!');
+                },
+                error: function(gameScore, error) {
+                    // Execute any logic that should take place if the save fails.
+                    // error is a Parse.Error with an error code and message.
+                    alert('Failed to save workspace, with error code: ' + error.message);
+                }
+            });
+        }
+        else
+        {
+            alert("User not logged in")
+        }
+    }
+    LoadLastSave()
+    {
+        console.log("Loading")
+        var currentUser = Parse.User.current();
+        var GameScore = Parse.Object.extend("GameScore");
+        var query = new Parse.Query(GameScore);
+        query.equalTo("username", currentUser.getUsername());
+        query.equalTo('ActivityName',this.activityName)
+        query.descending("updatedAt");
+        query.first({
+        success: object => {
+            var text = object.attributes['workspace']
+            this.LoadWorkspaceCallback(text);
+        },
+        error: function(error) {
+            alert("Error: " + error.code + " " + error.message);
+        }
+        });
+    }
+
+     LogOut() 
+    {
+        if (confirm("Are you sure you want to log out?") == true) 
+        {
+            Parse.User.logOut();
+            this.router.navigate('home');
+        } 
+        else 
+        {
+        }
     }
     
 }
