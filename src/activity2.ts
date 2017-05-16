@@ -11,6 +11,9 @@ var VirusProperties = {};
 
 var collidee;
 
+var MAX_PERSONS = 1;
+var MAX_VIRUSES = 1;
+
 function preload() {
     myApp.game.load.image('Man1', 'assets/Man1.png');
     myApp.game.load.image('Man2', 'assets/Man2.png');
@@ -36,7 +39,6 @@ function preload() {
 
 function CreateMultipleEntities(num,type)
 {
-    console.log("Here")
     if(num <= 0)
         return;
 
@@ -44,9 +46,20 @@ function CreateMultipleEntities(num,type)
 
     if(type == "People")
     {
+        if(num > MAX_PERSONS)
+            num = MAX_PERSONS;
         for(x=0;x<num;x++)
         {
             CreatePerson();
+        }
+    }
+    else if (type == "Viruses")
+    {
+        if(num > MAX_VIRUSES)
+            num = MAX_VIRUSES;
+        for(x=0;x<num;x++)
+        {
+            CreateVirus();
         }
     }
     else if(type == "Hospital")
@@ -57,24 +70,25 @@ function CreateMultipleEntities(num,type)
         }
 
     }
-    else if (type == "Viruses")
-    {
-        for(x=0;x<num;x++)
-        {
-            CreateVirus();
-        }
-    }
 }
 function CreateVirus()
 {
+    var c = {}
     GetCharacteristics("virusentity");
     var spriteName = VirusProperties.type;
+    
+    if(myApp.Viruses.length == 0)
+    {
+        c = myApp.Viruses.create(400, 300, spriteName);
+    }
+    else
+    {
+        c = myApp.Viruses.create(myApp.game.world.randomX, myApp.game.world.randomY, spriteName);
+    }
 
-    var c = myApp.Viruses.create(myApp.game.world.randomX, myApp.game.world.randomY, spriteName);
     c.scale = new Phaser.Point(1,1);
     c.anchor.set(.5);
     c.body.setSize(5,60,23,15)
-    //c.body.immovable = true;
 
     myApp.currentGameObject = c;
     myApp.currentGameObject.body.collideWorldBounds = true;
@@ -131,9 +145,16 @@ function CreatePerson()
 
 function SetCharacteristics(type,age,status)
 {
-    PersonProperties.type = type;
-    PersonProperties.age = age;
-    PersonProperties.status = status;
+    PersonProperties.type = "";
+    PersonProperties.age = "";
+    PersonProperties.status = "";
+
+    if(type.length > 0)
+        PersonProperties.type = type;
+    if(age.length > 0)
+        PersonProperties.age = age;
+    if(status.length > 0)
+        PersonProperties.status = status;
 }
 
 function SetVirusCharacteristics(virusType)
@@ -225,53 +246,20 @@ function GetCharacteristics(entityType)
         var xml = allXml[i];
         if(xml.getAttribute('type')== entityType)
         {
-          var in1 = xml.firstElementChild.firstElementChild;      
-          var headless = new Blockly.Workspace();
-          Blockly.Xml.domToBlock(in1, headless);
-          var code = Blockly.JavaScript.workspaceToCode(headless);
-          var interpreter = new Interpreter(code,myApp.initApi);
-          interpreter.run()
-          headless.dispose();
-        }
-    }
-}
-
-function ResetPhaser()
-{
-  myApp.game.world.removeAll(true,false,false)
-  create();
-}
-
-function GetCollisionBlockFromEntity(person,target)
-{
-    //Get Move Block
-    var allXml = Blockly.Xml.workspaceToDom(myApp.workspace).childNodes;
-    for (var i = 0; xml = allXml[i]; i++) {
-        var xml = allXml[i];
-        if(xml.getAttribute('type')=='personentity')
-        {
-          //Get Behavior Blocks
-          var childBlocks = xml.getElementsByTagName("block");
-          var collisionBlock = null;
-          for(var j=0; j<childBlocks.length; j++)
+          try
           {
-            if(childBlocks[j].getAttribute('type') == "collision")
-            {
-                if(childBlocks[j].firstChild.innerText==target)
-                {
-                    collisionBlock = childBlocks[j];
-                }
-            }
-          }
-          
-          if(collisionBlock != null)
-          {
+            var in1 = xml.firstElementChild.firstElementChild;      
             var headless = new Blockly.Workspace();
-            Blockly.Xml.domToBlock(collisionBlock, headless);
+            Blockly.Xml.domToBlock(in1, headless);
             var code = Blockly.JavaScript.workspaceToCode(headless);
             var interpreter = new Interpreter(code,myApp.initApi);
             interpreter.run()
             headless.dispose();
+          }
+          catch(error)
+          {
+              console.log("Error in GetCharacteristics for: "+entityType)
+              console.log(code);
           }
         }
     }
@@ -298,17 +286,73 @@ function CheckBehaviors(entityType)
           
           if(moveBlock != null)
           {
-            var headless = new Blockly.Workspace();
-            Blockly.Xml.domToBlock(moveBlock, headless);
-            var code = Blockly.JavaScript.workspaceToCode(headless);
-            var interpreter = new Interpreter(code,myApp.initApi);
-            interpreter.run()
-            headless.dispose();
+            try
+            {
+                var headless = new Blockly.Workspace();
+                Blockly.Xml.domToBlock(moveBlock, headless);
+                var code = Blockly.JavaScript.workspaceToCode(headless);
+                var interpreter = new Interpreter(code,myApp.initApi);
+                interpreter.run()
+                headless.dispose();
+            }
+            catch(error)
+            {
+                console.log("Error running CheckBehaviors for: " + entityType);
+            }
           }
         }
     }
     //Execute Move Block
 }
+
+function GetCollisionBlockFromEntity(person,target)
+{
+    //Get Move Block
+    var allXml = Blockly.Xml.workspaceToDom(myApp.workspace).childNodes;
+    for (var i = 0; xml = allXml[i]; i++) {
+        var xml = allXml[i];
+        if(xml.getAttribute('type')=='personentity')
+        {
+          //Get Behavior Blocks
+          var childBlocks = xml.getElementsByTagName("block");
+          var collisionBlock = null;
+          for(var j=0; j<childBlocks.length; j++)
+          {
+            if(childBlocks[j].getAttribute('type') == "collision")
+            {
+                if(childBlocks[j].firstChild.innerText==target)
+                {
+                    collisionBlock = childBlocks[j];
+                }
+            }
+          }
+          
+          if(collisionBlock != null)
+          {
+            try
+            {
+                var headless = new Blockly.Workspace();
+                Blockly.Xml.domToBlock(collisionBlock, headless);
+                var code = Blockly.JavaScript.workspaceToCode(headless);
+                var interpreter = new Interpreter(code,myApp.initApi);
+                interpreter.run()
+                headless.dispose();
+            }
+            catch(error)
+            {
+                console.log("Error in GetCollisionBlockFromEntity")
+            }
+            
+          }
+        }
+    }
+}
+function ResetPhaser()
+{
+  myApp.game.world.removeAll(true,false,false)
+  create();
+}
+
 
 function MoveEntity(direction)
 {  
@@ -365,7 +409,9 @@ HttpClient()
 
   detached()
   {
+      myApp.PushObject();
       myApp.game.destroy()
+      this.workspace.dispose();
   }
 
 
@@ -406,6 +452,7 @@ HttpClient()
         var client = new this.HttpClient();
         client.get(url, this.LoadWorkspaceCallback);
       }
+      myApp.workspace.addChangeListener(myApp.onBlocklyChange);
   }
 
   LoadToolBoxCallback(ResponseText)
@@ -493,6 +540,7 @@ HttpClient()
 
   runSimulation()
   {
+    myApp.LogEvent("RunSimulation")
     myApp.ResetPhaser();
     //Get WhenRun Head
     //Run code
@@ -602,6 +650,7 @@ HttpClient()
     
     PushObject()
     {
+        myApp.LogEvent("SaveWorkspace")
         var currentUser = Parse.User.current();
         if(currentUser)
         {
@@ -638,6 +687,7 @@ HttpClient()
     {
         if (confirm("Are you sure you want to log out?") == true) 
         {
+            myApp.LogEvent("LogOut")
             Parse.User.logOut();
             this.router.navigate('home');
         } 
@@ -646,8 +696,9 @@ HttpClient()
         }
     }
 
-     LoadLastSave()
+    LoadLastSave()
     {
+        myApp.LogEvent("LoadLastSave")
         var currentUser = Parse.User.current();
         var GameScore = Parse.Object.extend("GameScore");
         var query = new Parse.Query(GameScore);
@@ -665,6 +716,91 @@ HttpClient()
         });
     }
 
+     onBlocklyChange(event)
+    {
+        var currentUser = Parse.User.current();
+        if(currentUser)
+        {
+            var xml = Blockly.Xml.workspaceToDom(myApp.workspace);
+            var xml_text = Blockly.Xml.domToPrettyText(xml);
+
+            var TraceLog = Parse.Object.extend("TraceLog");
+            var traceLog = new TraceLog();
+           
+            traceLog.set("username",currentUser.getUsername());
+            traceLog.set("sessionToken",currentUser.getSessionToken());
+            traceLog.set("ActivityName",myApp.activityName);
+            traceLog.set("EventType",event.type);
+            traceLog.set("EventBlock",event.blockId);
+            traceLog.set("workspace", xml_text) ;
+        
+            traceLog.save(null, {
+                success: function(traceLog) {
+                    // Execute any logic that should take place after the object is saved.
+                    //alert('Workspace Saved!');
+                },
+                error: function(traceLog, error) {
+                    // Execute any logic that should take place if the save fails.
+                    // error is a Parse.Error with an error code and message.
+                    console.log("Failed to save event: " + error.message);
+                }
+            });
+        }
+        else
+        {
+            console.log("Failed to save event:  User not logged in")
+        }
+    }
+
+     ResetCode() 
+    {
+        if (confirm("Are you sure you want to reset the code to its initial state?") == true) 
+        {
+            myApp.LogEvent("ResetWorkspace")
+            myApp.workspace.clear();
+            var url = "resources/InitialWorkspaces/Activity2.xml";
+            var client = new this.HttpClient();
+            client.get(url, this.LoadWorkspaceCallback);
+        } 
+        else 
+        {
+        }
+    }
+    LogEvent(eventType)
+    {
+        var currentUser = Parse.User.current();
+        if(currentUser)
+        {   
+
+            var xml = Blockly.Xml.workspaceToDom(myApp.workspace);
+            var xml_text = Blockly.Xml.domToPrettyText(xml);
+
+            var TraceLog = Parse.Object.extend("TraceLog");
+            var traceLog = new TraceLog();
+
+            traceLog.set("username",currentUser.getUsername());
+            traceLog.set("sessionToken",currentUser.getSessionToken());
+            traceLog.set("ActivityName",myApp.activityName);
+            traceLog.set("EventType",eventType);
+            traceLog.set("workspace", xml_text) ;
+        
+            traceLog.save(null, {
+                success: function(traceLog) {
+                    // Execute any logic that should take place after the object is saved.
+                    //alert('Workspace Saved!');
+                },
+                error: function(traceLog, error) {
+                    // Execute any logic that should take place if the save fails.
+                    // error is a Parse.Error with an error code and message.
+                    console.log("Failed to save event: " + error.message);
+                }
+            });
+        }
+        else
+        {
+            console.log("Failed to save event:  User not logged in")
+        }
+    }
     
 
 

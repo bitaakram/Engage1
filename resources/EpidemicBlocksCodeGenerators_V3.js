@@ -25,7 +25,11 @@ Blockly.JavaScript['personchar'] = function(block) {
   var value_type = Blockly.JavaScript.valueToCode(block, 'Type', Blockly.JavaScript.ORDER_ATOMIC);
   var value_age = Blockly.JavaScript.valueToCode(block, 'Age', Blockly.JavaScript.ORDER_ATOMIC);
   var value_status = Blockly.JavaScript.valueToCode(block, 'Status', Blockly.JavaScript.ORDER_ATOMIC);
-  var code = 'SetCharacteristics(' + value_type + ',\"' + value_age + '\",' + value_status + ')\n';
+  value_type = value_type ? value_type.toString() : '\"\"';
+  value_age = value_age ? value_age.toString() : '\"\"';
+  value_status = value_status ? value_status.toString() : '\"\"';
+
+  var code = 'SetCharacteristics(' + value_type + ',' + value_age + ',' + value_status + ')\n';
   
   return [code];
 };
