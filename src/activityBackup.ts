@@ -10,7 +10,6 @@ var PersonProperties = {};
 var MAX_PERSONS = 1;
 var MAX_VIRUSES = 0;
 
-
 function preload() {
     myApp.game.load.image('Man1', 'assets/Man1.png');
     myApp.game.load.image('Man2', 'assets/Man2.png');
@@ -340,9 +339,7 @@ export class Activity1 {
   SampleRate;
   currentGameObject;
   Entities;
-  FselUser='';
-  PselUser='';
-  ind=0;
+  
 
   constructor(router) {
     myApp = this;
@@ -397,7 +394,6 @@ export class Activity1 {
 
   LoadWorkspaceCallback(ResponseText)
   {
-      
       var xml_text  = ResponseText;
       var xml = Blockly.Xml.textToDom(xml_text);
       myApp.workspace.clear();
@@ -583,87 +579,15 @@ export class Activity1 {
         }
     }
 
-   
-      LoadGameScore(rUserName)
-    {
-      //currentUser=what you define;
-      var GameScore = Parse.Object.extend("GameScore");
-      var query = new Parse.Query(GameScore);
-        query.equalTo("username", rUserName);
-        query.equalTo('ActivityName',this.activityName)
-        query.descending("updatedAt");
-        query.first({
-        success: object => {
-            var text = object.attributes['workspace']
-            this.LoadWorkspaceCallback(text);
-        },
-        error: function(error) {
-            alert("Error: " + error.code + " " + error.message);
-        }
-        });            
-    }
-   LoadTraceLog(rUserName)
-    {
-      //currentUser=what you define;
-      var count=0;
-      var TraceLog = Parse.Object.extend("TraceLog");
-      var query = new Parse.Query(TraceLog);
-        query.equalTo("username", rUserName);
-        query.equalTo('ActivityName',this.activityName)
-        query.ascending("updatedAt");
-        query.find({
-            success: function(results) {
-                count=results.length;
-                
-            },
-            error: function(error) {
-                alert("Error: " + error.code + " " + error.message);
-            }
-        });
-        query.skip(this.ind);
-        query.first({
-            success: object => {
-                // if(this.ind>count){
-                //      alert("reached end of the traceLog");
-                //      this.clear();
-                //      this.ind=0;
-                // }
-                var text = object.attributes['workspace']
-                this.LoadWorkspaceCallback(text);
-            },
-            error: function(error) {
-                alert("Error: " + error.code + " " + error.message);
-            }
-        });        
-    this.ind=this.ind+1;
-    }
-
-    showFinalResult(){   
-         myApp.workspace.clear();
-         this.LoadGameScore(this.FselUser);      
-         this.FselUser='';
-    }
-
-showProgress(){
-    this.LoadTraceLog(this.PselUser); 
-   // this.PselUser='';
-}
-clear(){
-    myApp.workspace.clear();
-    this.PselUser='';
-    this.ind=0;
-}
-
-     ResetCode() 
+    ResetCode() 
     {
         if (confirm("Are you sure you want to reset the code to its initial state?") == true) 
         {
             myApp.LogEvent("ResetWorkspace")
             myApp.workspace.clear();
-            this.LoadGameScore('bita');
-         //   var url = "resources/InitialWorkspaces/Activity1.xml";
-          //  var client = new this.HttpClient();
-          // client.get(url, this.LoadWorkspaceCallback);
+            var url = "resources/InitialWorkspaces/Activity1.xml";
+            var client = new this.HttpClient();
+            client.get(url, this.LoadWorkspaceCallback);
         } 
         else 
         {
@@ -761,8 +685,5 @@ clear(){
             console.log("Failed to save event:  User not logged in")
         }
     }
-
-
-
 
 }

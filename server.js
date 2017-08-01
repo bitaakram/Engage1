@@ -62,6 +62,13 @@ console.log(`Server listening on port ${port}`);
 var express = require('express');
 var ParseServer = require('parse-server').ParseServer;
 var path = require('path');
+/*var MongoClient = require('mongodb').MongoClient;
+
+MongoClient.connect("mongodb://localhost:27017/exampleDb", function(err, db) {
+  if(!err) {
+    console.log("We are connected");
+  }
+});*/
 
 var databaseUri = process.env.DATABASE_URI || process.env.MONGODB_URI;
 
@@ -70,7 +77,8 @@ if (!databaseUri) {
 }
 
 var api = new ParseServer({
-  databaseURI: databaseUri || 'mongodb://localhost:27017/dev',
+  databaseURI: databaseUri || 'mongodb://localhost:27017/ heroku_xv9p7mwl', //'mongodb://localhost:27017/heroku_0r9t0hhq',
+ 
  // cloud: process.env.CLOUD_CODE_MAIN || __dirname + '/cloud/main.js',
   appId: process.env.APP_ID || 'myAppId',
   masterKey: process.env.MASTER_KEY || 'monkey', //Add your master key here. Keep it secret!

@@ -10,7 +10,6 @@ var PersonProperties = {};
 var MAX_PERSONS = 1;
 var MAX_VIRUSES = 0;
 
-
 function preload() {
     myApp.game.load.image('Man1', 'assets/Man1.png');
     myApp.game.load.image('Man2', 'assets/Man2.png');
@@ -327,7 +326,7 @@ function ResetPhaser()
 }
 
 @inject(Router)
-export class Activity1 {
+export class data {
   workspace = {};
   interpreter = {};
   toolbox;
@@ -340,9 +339,7 @@ export class Activity1 {
   SampleRate;
   currentGameObject;
   Entities;
-  FselUser='';
-  PselUser='';
-  ind=0;
+  
 
   constructor(router) {
     myApp = this;
@@ -397,18 +394,19 @@ export class Activity1 {
 
   LoadWorkspaceCallback(ResponseText)
   {
-      
       var xml_text  = ResponseText;
       var xml = Blockly.Xml.textToDom(xml_text);
       myApp.workspace.clear();
       Blockly.Xml.domToWorkspace(xml, myApp.workspace);
   }
   
-
+//you might need to change this one: var url = "resources/InitialWorkspaces/Activity1.xml";
   LoadInitialWorkspace()
   {
       myApp.workspace.clear();
-      this.LoadLastSave();
+      //this.LoadLastSave();
+      rUserName="AB7"
+      this.LoadGameScore(rUserName);
       if(myApp.workspace.getAllBlocks().length == 0)
       {
         var url = "resources/InitialWorkspaces/Activity1.xml";
@@ -455,7 +453,7 @@ export class Activity1 {
     myApp.game.world.removeAll(true,false,false)
     create();
   }
-
+//Read through the blcoks,interpret them to code and run the simulation
   runSimulation()
   {
     myApp.LogEvent("RunSimulation")
@@ -534,10 +532,13 @@ export class Activity1 {
             interpreter.createNativeFunction(wrapper));
 
     }
-     
+    
+
+    /******************** This module has some useful information *****************/
    PushObject()
    {    
-        myApp.LogEvent("SaveWorkspace")
+
+       /* myApp.LogEvent("SaveWorkspace")
         var currentUser = Parse.User.current();
         if(currentUser)
         {
@@ -567,12 +568,12 @@ export class Activity1 {
         else
         {
             alert("User not logged in")
-        }
+        }*/
    }
-
+/*****************************************************************************
     LogOut() 
     {
-        if (confirm("Are you sure you want to log out?") == true) 
+      /*  if (confirm("Are you sure you want to log out?") == true) 
         {
             myApp.LogEvent("LogOut")
             Parse.User.logOut();
@@ -580,12 +581,28 @@ export class Activity1 {
         } 
         else 
         {
+        }*/
+    
+
+    ResetCode() 
+    {
+        if (confirm("Are you sure you want to reset the code to its initial state?") == true) 
+        {
+            myApp.LogEvent("ResetWorkspace")
+            myApp.workspace.clear();
+           // LoadGameScore(rUserName)
+            var url = "resources/InitialWorkspaces/Activity2.xml";
+            var client = new this.HttpClient();
+            client.get(url, this.LoadWorkspaceCallback);
+        } 
+        else 
+        {
         }
     }
 
-   
-      LoadGameScore(rUserName)
+    LoadGameScore(rUserName)
     {
+      
       //currentUser=what you define;
       var GameScore = Parse.Object.extend("GameScore");
       var query = new Parse.Query(GameScore);
@@ -601,73 +618,6 @@ export class Activity1 {
             alert("Error: " + error.code + " " + error.message);
         }
         });            
-    }
-   LoadTraceLog(rUserName)
-    {
-      //currentUser=what you define;
-      var count=0;
-      var TraceLog = Parse.Object.extend("TraceLog");
-      var query = new Parse.Query(TraceLog);
-        query.equalTo("username", rUserName);
-        query.equalTo('ActivityName',this.activityName)
-        query.ascending("updatedAt");
-        query.find({
-            success: function(results) {
-                count=results.length;
-                
-            },
-            error: function(error) {
-                alert("Error: " + error.code + " " + error.message);
-            }
-        });
-        query.skip(this.ind);
-        query.first({
-            success: object => {
-                // if(this.ind>count){
-                //      alert("reached end of the traceLog");
-                //      this.clear();
-                //      this.ind=0;
-                // }
-                var text = object.attributes['workspace']
-                this.LoadWorkspaceCallback(text);
-            },
-            error: function(error) {
-                alert("Error: " + error.code + " " + error.message);
-            }
-        });        
-    this.ind=this.ind+1;
-    }
-
-    showFinalResult(){   
-         myApp.workspace.clear();
-         this.LoadGameScore(this.FselUser);      
-         this.FselUser='';
-    }
-
-showProgress(){
-    this.LoadTraceLog(this.PselUser); 
-   // this.PselUser='';
-}
-clear(){
-    myApp.workspace.clear();
-    this.PselUser='';
-    this.ind=0;
-}
-
-     ResetCode() 
-    {
-        if (confirm("Are you sure you want to reset the code to its initial state?") == true) 
-        {
-            myApp.LogEvent("ResetWorkspace")
-            myApp.workspace.clear();
-            this.LoadGameScore('bita');
-         //   var url = "resources/InitialWorkspaces/Activity1.xml";
-          //  var client = new this.HttpClient();
-          // client.get(url, this.LoadWorkspaceCallback);
-        } 
-        else 
-        {
-        }
     }
 
     LoadLastSave()
@@ -689,10 +639,10 @@ clear(){
         }
         });
     }
-
+//******************** This module has some useful information ****************
     onBlocklyChange(event)
     {
-        var currentUser = Parse.User.current();
+        /*var currentUser = Parse.User.current();
         if(currentUser)
         {
             var xml = Blockly.Xml.workspaceToDom(myApp.workspace);
@@ -723,12 +673,12 @@ clear(){
         else
         {
             console.log("Failed to save event:  User not logged in")
-        }
+        }*/
     }
-
+/******************** This module has some useful information *****************/
     LogEvent(eventType)
     {
-        var currentUser = Parse.User.current();
+/*        var currentUser = Parse.User.current();
         if(currentUser)
         {   
 
@@ -759,10 +709,29 @@ clear(){
         else
         {
             console.log("Failed to save event:  User not logged in")
-        }
+        }*/
     }
 
+    /*var MongoClient = require('mongodb').MongoClient;
 
+// Connect to the db
+    MongoClient.connect("mongodb://localhost:27017/heroku_0r9t0hhq", function (err, db) {
 
+      db.collection('GameScore', function (err, collection) {
+        
+         collection.find().toArray(function(err, items) {
+            if(err) throw err;    
+            console.log(items);            
+        });
+        
+    });
+            
+   
+         if(err) throw err;
 
+     //Write databse Insert/Update/Query code here..
+                
+  });
+*/
 }
+

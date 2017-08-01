@@ -379,6 +379,7 @@ export class Activity3 {
   currentGameObject;
   Persons;
   Viruses;
+  ind=0;
   
 
   constructor(router) {
@@ -769,6 +770,75 @@ export class Activity3 {
         {
         }
     }
+      LoadGameScore(rUserName)
+    {
+      //currentUser=what you define;
+      var GameScore = Parse.Object.extend("GameScore");
+      var query = new Parse.Query(GameScore);
+        query.equalTo("username", rUserName);
+        query.equalTo('ActivityName',this.activityName)
+        query.descending("updatedAt");
+        query.first({
+        success: object => {
+            var text = object.attributes['workspace']
+            this.LoadWorkspaceCallback(text);
+        },
+        error: function(error) {
+            alert("Error: " + error.code + " " + error.message);
+        }
+        });            
+    }
+   LoadTraceLog(rUserName)
+    {
+      //currentUser=what you define;
+      var count=0;
+      var TraceLog = Parse.Object.extend("TraceLog");
+      var query = new Parse.Query(TraceLog);
+        query.equalTo("username", rUserName);
+        query.equalTo('ActivityName',this.activityName)
+        query.ascending("updatedAt");
+        query.find({
+            success: function(results) {
+                count=results.length;
+                
+            },
+            error: function(error) {
+                alert("Error: " + error.code + " " + error.message);
+            }
+        });
+        query.skip(this.ind);
+        query.first({
+            success: object => {
+                // if(this.ind>count){
+                //      alert("reached end of the traceLog");
+                //      this.clear();
+                //      this.ind=0;
+                // }
+                var text = object.attributes['workspace']
+                this.LoadWorkspaceCallback(text);
+            },
+            error: function(error) {
+                alert("Error: " + error.code + " " + error.message);
+            }
+        });        
+    this.ind=this.ind+1;
+    }
+
+    showFinalResult(){   
+         myApp.workspace.clear();
+         this.LoadGameScore(this.FselUser);      
+         this.FselUser='';
+    }
+
+showProgress(){
+    this.LoadTraceLog(this.PselUser); 
+   // this.PselUser='';
+}
+clear(){
+    myApp.workspace.clear();
+    this.PselUser='';
+    this.ind=0;
+}
     LogEvent(eventType)
     {
         var currentUser = Parse.User.current();

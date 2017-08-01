@@ -1,25 +1,5 @@
 <xml xmlns="http://www.w3.org/1999/xhtml" id="toolbox" style="display: none;">
   <category name="Activity 1">
-    <block type="personentity">
-      <statement name="NAME">
-        <block type="in1">
-          <value name="NAME">
-            <block type="personchar"></block>
-          </value>
-          <next>
-            <block type="in1">
-              <value name="NAME">
-                <block type="behaviors2">
-                  <statement name="NAME">
-                    <block type="in_behaviour"></block>
-                  </statement>
-                </block>
-              </value>
-            </block>
-          </next>
-        </block>
-      </statement>
-    </block>
     <block type="persontype">
       <field name="Type">Man1</field>
     </block>
@@ -41,26 +21,6 @@
     </block>
   </category>
   <category name="Activity 2">
-    <block type="virusentity">
-      <statement name="NAME">
-        <block type="in1">
-          <value name="NAME">
-            <block type="viruschar"></block>
-          </value>
-          <next>
-            <block type="in1">
-              <value name="NAME">
-                <block type="behaviors2">
-                  <statement name="NAME">
-                    <block type="in_behaviour"></block>
-                  </statement>
-                </block>
-              </value>
-            </block>
-          </next>
-        </block>
-      </statement>
-    </block>
     <block type="virustype">
       <field name="Type">Virus1</field>
     </block>
@@ -81,26 +41,6 @@
     </block>
   </category>
   <category name="Agents">
-    <block type="personentity">
-      <statement name="NAME">
-        <block type="in1">
-          <value name="NAME">
-            <block type="personchar"></block>
-          </value>
-          <next>
-            <block type="in1">
-              <value name="NAME">
-                <block type="behaviors2">
-                  <statement name="NAME">
-                    <block type="in_behaviour"></block>
-                  </statement>
-                </block>
-              </value>
-            </block>
-          </next>
-        </block>
-      </statement>
-    </block>
     <block type="persontype">
       <field name="Type">Man1</field>
     </block>
@@ -109,26 +49,6 @@
     </block>
     <block type="age">
       <field name="age">0</field>
-    </block>
-    <block type="virusentity">
-      <statement name="NAME">
-        <block type="in1">
-          <value name="NAME">
-            <block type="viruschar"></block>
-          </value>
-          <next>
-            <block type="in1">
-              <value name="NAME">
-                <block type="behaviors2">
-                  <statement name="NAME">
-                    <block type="in_behaviour"></block>
-                  </statement>
-                </block>
-              </value>
-            </block>
-          </next>
-        </block>
-      </statement>
     </block>
     <block type="virustype">
       <field name="Type">Virus1</field>

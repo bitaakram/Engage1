@@ -47,6 +47,18 @@
         <div class="instructions-button" click.trigger="PushObject()"> Save</a></div>
         <div class="instructions-button" click.trigger="LoadLastSave()"> Load</a></div> 
         <div class="instructions-button" click.trigger="ResetCode()"> Reset Code</a></div>
+        <div class="instructions-button" click.trigger="clear()"> Clear Name</a></div>
+        <!--<div class="instructions-button" click.trigger="showNextPerson()"> Next person</a></div>-->
+
+        <form submit.trigger="showFinalResult()">
+          <input type="text" value.bind="FselUser">
+          <button type="Final Result">Show Final Result</button>
+        </form>
+
+         <form submit.trigger="showProgress()">
+          <input type="text" value.bind="PselUser">
+          <button type="Final Result">Show Progress</button>
+        </form>
       </div>
 
 
